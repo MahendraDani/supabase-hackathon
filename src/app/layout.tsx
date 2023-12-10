@@ -4,6 +4,7 @@ import { Inter as FontSans } from "next/font/google"
 import { ThemeProvider } from "@/components/custom/theme/theme-provider";
 import { cn } from "@/lib/utils";
 import Navbar from '@/components/custom/navbar/navbar';
+import { Toaster } from "@/components/ui/toaster"
 
 
 
@@ -33,6 +34,7 @@ export default function RootLayout({
         >
           <Navbar />
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
