@@ -4,10 +4,6 @@ import { ModeToggle } from "../theme/theme";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation"
-import type { Metadata } from 'next'
-
-
-
 
 const Navbar = async () => {
   const router = useRouter();
