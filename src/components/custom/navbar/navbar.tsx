@@ -1,9 +1,25 @@
 "use client";
-
 import Link from "next/link";
 import { ModeToggle } from "../theme/theme";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation"
 
-const Navbar = () => {
+
+
+const Navbar = async () => {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const supabase = createClientComponentClient();
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      JSON.stringify(error, null, 2);
+    }
+    router.push("/");
+  }
+
   return (
     <div className="w-[90%] mx-auto border-b-[1px] border-slate-200">
       <nav className="p-4 flex justify-between items-center">
@@ -15,13 +31,23 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <div className="flex justify-between items-center gap-4">
-          <Link href={"/login"}>Login</Link>
-          <Link href={"/signup"}>Sign up</Link>
-          <ModeToggle />
+        <div >
+          {/* {!session ? <div className="flex justify-between items-center gap-4">
+            <Link href={"/login"}>Login</Link>
+            <Link href={"/signup"}>Sign up</Link>
+            <ModeToggle />
+          </div> :
+            <Button variant={"secondary"} />
+          } */}
+          <div className="flex justify-between items-center gap-4">
+            <Link href={"/login"}>Login</Link>
+            <Link href={"/signup"}>Sign up</Link>
+            <Button variant={"outline"} onClick={handleLogout}>Log out</Button>
+            <ModeToggle />
+          </div>
         </div>
-      </nav>
-    </div>
+      </nav >
+    </div >
   )
 }
 export default Navbar;
