@@ -4,6 +4,7 @@ import { Inter as FontSans } from "next/font/google"
 import { ThemeProvider } from "@/components/custom/theme/theme-provider";
 
 import { cn } from "@/lib/utils";
+import Navbar from '@/components/custom/navbar/navbar';
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -34,6 +35,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Navbar />
           {children}
         </ThemeProvider>
       </body>
