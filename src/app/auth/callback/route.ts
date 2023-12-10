@@ -10,7 +10,8 @@ export async function GET(request: Request) {
     const supabase = createRouteHandlerClient({ cookies });
     const response = await supabase.auth.exchangeCodeForSession(code);
 
+    // If logic is success , user will be redirected to this route
     return NextResponse.redirect("http://localhost:3000/settings");
   }
-  NextResponse.redirect("http://localhost:3000/settings");
+  NextResponse.redirect("http://localhost:3000/signup");
 }
