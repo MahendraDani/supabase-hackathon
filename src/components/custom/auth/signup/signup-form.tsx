@@ -16,12 +16,8 @@ import { useRouter } from "next/navigation"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
-import { string, z } from "zod";
+import { z } from "zod";
 
-type SignupFormData = {
-  email: string;
-  password: string;
-}
 
 const SignupForm = () => {
   const { toast } = useToast()
@@ -95,7 +91,7 @@ const SignupForm = () => {
   return (
     <div>
       <Card className="w-[350px]">
-        <CardHeader>
+        <CardHeader className="text-center">
           <CardTitle>Create your Account</CardTitle>
           <CardDescription>Join the community, spread the word!</CardDescription>
         </CardHeader>

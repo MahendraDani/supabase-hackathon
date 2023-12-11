@@ -15,25 +15,66 @@ import { useState } from "react";
 import { useRouter } from "next/navigation"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
+import { ToastAction } from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
+import { z } from "zod";
 
 const LoginForm = () => {
+  const { toast } = useToast()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isEmailError, setIsEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [isPasswordError, setIsPasswordError] = useState(false);
+  const [passwordErrorMesage, setPasswordErrorMessage] = useState("");
+
+  const loginFormSchema = z.object({
+    email: z.string().email({ message: "Invalid or incorrect email address" }),
+    password: z.string().min(9, { message: "Password must be atleast 9 characters long" })
+  })
 
   const router = useRouter();
   const supabase = createClientComponentClient();
   const handleLogin = async () => {
+    if (!email || !password) {
+      toast({
+        title: "Invalid Credentails",
+        description: "Both email and password are required!",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      })
+    }
+    const parsedInput = loginFormSchema.safeParse({ email, password })
+    if (!parsedInput.success) {
+      const parseErrors = parsedInput.error.issues;
+      parseErrors.forEach((e) => {
+        if (e.path[0] === "email") {
+          setIsEmailError(true);
+          setEmailErrorMessage(e.message)
+        } else if (e.path[0] === "password") {
+          setIsPasswordError(true);
+          setPasswordErrorMessage(e.message)
+        }
+      })
+      return;
+    }
     const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
+      email: parsedInput.data.email,
+      password: parsedInput.data.password,
     })
 
     if (error) {
-      alert(JSON.stringify(error, null, 2))
+      if (error.name === "AuthApiError") {
+        toast({
+          title: "Invalid login credentials",
+          description: "Please enter a valid email address and password",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        })
+      }
+      return;
     }
 
+    // TODO : push to proctected route : home page of user
     router.push("/settings");
-    router.refresh();
   }
 
   const handleLoginWithGithub = async () => {
@@ -88,10 +129,12 @@ const LoginForm = () => {
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} />
+                {isEmailError && <span className="text-red-400 text-sm">{emailErrorMessage}</span>}
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="password">Password</Label>
                 <Input id="password" type="password" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)} />
+                {isPasswordError && <span className="text-red-400 text-sm">{passwordErrorMesage}</span>}
               </div>
             </div>
           </form>
