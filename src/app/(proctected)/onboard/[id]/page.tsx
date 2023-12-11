@@ -76,7 +76,7 @@ export default function ({ params }: PageProps) {
 
     const supabase = createClientComponentClient();
     const { data, error } = await supabase.from("profiles").insert([{
-      user_id: params.id, full_name: fullName, username: username
+      user_id: params.id, full_name: fullName, username: username, gender
     }]);
 
     if (error) {

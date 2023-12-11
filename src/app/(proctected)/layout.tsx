@@ -9,7 +9,7 @@ type ProctectedLayoutProps = {
 }
 
 export const metadata: Metadata = {
-  title: 'Story | Settings',
+  title: 'Rhymes & Fables',
   description: 'Settings page of a user',
 }
 
