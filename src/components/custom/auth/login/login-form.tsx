@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label"
 import { useState } from "react";
 import { useRouter } from "next/navigation"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { GitHubLogoIcon } from "@radix-ui/react-icons"
+import Image from "next/image";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -49,6 +49,19 @@ const LoginForm = () => {
     }
   }
 
+  const handleLoginWithGoogle = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `http://localhost:3000/auth/callback/`
+      }
+    })
+
+    if (error) {
+      alert(JSON.stringify(error, null, 2));
+    }
+  }
+
   return (
     <div>
       <Card className="w-[350px]">
@@ -58,10 +71,13 @@ const LoginForm = () => {
         </CardHeader>
         <CardHeader className="flex gap-2">
           <Button variant={"outline"} onClick={handleLoginWithGithub} className="flex justify-center items-center gap-2">
-            <GitHubLogoIcon className="text-lg" />
+            <Image src={"/icons/github.svg"} width={24} height={24} alt="Github Logo" />
             <span>Github</span>
           </Button>
-          <Button variant={"outline"}>Login using Google</Button>
+          <Button variant={"outline"} onClick={handleLoginWithGoogle} className="flex justify-center items-center gap-2">
+            <Image src={"/icons/google.svg"} width={24} height={24} alt="Google logo" />
+            <span>Google</span>
+          </Button>
         </CardHeader>
         <div className="flex justify-center items-center mb-2">
           <div className="text-sm text-slate-300">OR CONTINUE WITH</div>
