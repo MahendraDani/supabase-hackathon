@@ -23,7 +23,7 @@ const ProctectedLayout = async ({ children }: ProctectedLayoutProps) => {
       </div>
     )
   } {
-    // TODO : Show good UI for showing users that they are not logged in and give a button to redirect to login page
+    // TODO : Show good UI for showing users that they are not logged in and give a button to redirect to login
     return (<div>You are not LOGGED IN !</div>)
   }
 

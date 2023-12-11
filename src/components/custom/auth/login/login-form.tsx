@@ -74,8 +74,6 @@ const LoginForm = () => {
     }
     // Redirects user to onboard/id page with that user's id
     router.push(`/onboard/${user?.id}`);
-
-
   }
 
   const handleLoginWithGithub = async () => {
