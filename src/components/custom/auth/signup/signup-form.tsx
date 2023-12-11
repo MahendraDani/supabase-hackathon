@@ -83,7 +83,7 @@ const SignupForm = () => {
       }
       return;
     }
-    // TODO : push to proctected route : home page of user
+    // TODO : DON'T REDIRECT USER SHOW THEM TO OPEN THEIR EMAIL FOR CONFIRMATION LINK
     router.push("/settings");
 
   }
