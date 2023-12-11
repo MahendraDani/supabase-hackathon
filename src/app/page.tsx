@@ -8,7 +8,7 @@ export default function Home() {
 
 export function generateMetadata({ params }: { params: any }) {
   return {
-    title: "Story  Sphere",
+    title: "Rhymes & Fables",
     description: "Landind page"
   }
 }

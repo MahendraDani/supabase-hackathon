@@ -57,7 +57,7 @@ const LoginForm = () => {
       })
       return;
     }
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data: { user }, error } = await supabase.auth.signInWithPassword({
       email: parsedInput.data.email,
       password: parsedInput.data.password,
     })
@@ -72,9 +72,10 @@ const LoginForm = () => {
       }
       return;
     }
+    // Redirects user to onboard/id page with that user's id
+    router.push(`/onboard/${user?.id}`);
 
-    // TODO : push to proctected route : home page of user
-    router.push("/settings");
+
   }
 
   const handleLoginWithGithub = async () => {

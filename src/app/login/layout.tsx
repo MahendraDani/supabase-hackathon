@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { ReactNode } from 'react'
 export const metadata: Metadata = {
-  title: 'Story | Login',
+  title: 'Login | R&F',
   description: 'Login page for user',
 }
 
