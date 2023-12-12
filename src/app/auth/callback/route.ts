@@ -9,11 +9,16 @@ export async function GET(request: Request) {
   if (code) {
     const supabase = createRouteHandlerClient({ cookies });
     const response = await supabase.auth.exchangeCodeForSession(code);
-
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     // If logic is success , user will be redirected to this route
     // TODO figure out a way to redirect users who login with google or github to /onboard/[id] route without breaking the app
-    return NextResponse.redirect("http://localhost:3000/onboard/");
+    if (user) {
+      return NextResponse.redirect(`http://localhost:3000/onboard/${user?.id}`);
+    }
+    return NextResponse.redirect("http://localhost:3000/signup");
   }
   //TODO :  THIS happens when there is some error, so show an error page instead
-  NextResponse.redirect("http://localhost:3000/signup");
+  return NextResponse.redirect("http://localhost:3000/signup");
 }

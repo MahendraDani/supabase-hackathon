@@ -72,8 +72,8 @@ const LoginForm = () => {
       }
       return;
     }
-    // Redirects user to onboard/id page with that user's id
-    router.push(`/onboard/${user?.id}`);
+    //TODO: Redirects user feeds idoit!
+    router.push(`/onboard/`);
   }
 
   const handleLoginWithGithub = async () => {

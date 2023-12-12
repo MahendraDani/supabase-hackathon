@@ -59,7 +59,7 @@ const SignupForm = () => {
     }
 
     const supabase = createClientComponentClient();
-    const { data, error } = await supabase.auth.signUp({
+    const { data: { user }, error } = await supabase.auth.signUp({
       email: parsedInput.data.email,
       password: parsedInput.data.password,
       options: {
@@ -84,8 +84,7 @@ const SignupForm = () => {
       return;
     }
     // TODO : DON'T REDIRECT USER SHOW THEM TO OPEN THEIR EMAIL FOR CONFIRMATION LINK
-    router.push("/settings");
-
+    router.push(`/onboard/${user?.id}`);
   }
 
   return (
