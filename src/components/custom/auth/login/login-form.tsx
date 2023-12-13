@@ -73,7 +73,7 @@ const LoginForm = () => {
       return;
     }
     //TODO: Redirects user feeds idoit!
-    router.push(`/onboard/`);
+    router.push(`/feeds/`);
   }
 
   const handleLoginWithGithub = async () => {
