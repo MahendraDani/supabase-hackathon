@@ -193,12 +193,8 @@ const FeedsCard = () => {
           )
         })}
       </div>
-      {/* <div>
-        <Button onClick={() => {
-          handleFeeds();
-        }}>Get feeds</Button>
-      </div> */}
     </div>
   )
 }
 export default FeedsCard;
+

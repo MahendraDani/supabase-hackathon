@@ -30,13 +30,6 @@ const Navbar = async () => {
         </div>
 
         <div >
-          {/* {!session ? <div className="flex justify-between items-center gap-4">
-            <Link href={"/login"}>Login</Link>
-            <Link href={"/signup"}>Sign up</Link>
-            <ModeToggle />
-          </div> :
-            <Button variant={"secondary"} />
-          } */}
           <div className="flex justify-between items-center gap-4">
             <Link href={"/login"}>Login</Link>
             <Link href={"/signup"}>Sign up</Link>
