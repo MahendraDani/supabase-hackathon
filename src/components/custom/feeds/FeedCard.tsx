@@ -10,63 +10,46 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useEffect, useState } from "react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Button } from "@/components/ui/button";
+import { QueryResult, QueryData, QueryError } from '@supabase/supabase-js'
 
-interface storyFeedInterface {
-  story_id?: string;
-  title?: string;
-  genre?: string;
-  like_count?: string;
-  read_count?: string;
-  comment_count?: string;
-  created_at?: string;
-  profiles?: {
-    username: string;
-    full_name: string;
-  }
-}
 
 const FeedsCard = () => {
-  // full_name, username, avatar
-  const [feed, setFeed] = useState<storyFeedInterface[]>([])
-
-  const fetchStoryFeeds = async () => {
-    const supabase = createClientComponentClient();
-    const { data, error } = await supabase.from("stories").select(`
-      story_id,
-      title,
-      created_at,
-      like_count,
-      read_count,
-      comment_count,
-      genre,
-      profiles(
-        username,
-        full_name
-      )
-    `);
+  const supabase = createClientComponentClient<Database>();
+  const storiesWithProfiles = supabase.from("stories").select(
+    `
+    *,
+    profiles(
+      username,
+      full_name
+    )
+    `
+  )
+  type StoriesWithProfilesType = QueryData<typeof storiesWithProfiles>
+  const [feed, setFeed] = useState<StoriesWithProfilesType | null>([])
+  const handleFeeds = async () => {
+    const { data, error } = await storiesWithProfiles;
     if (error) {
       JSON.stringify(error, null, 2);
-      return;
     }
-
+    // console.log(data);
     setFeed(data);
   }
   useEffect(() => {
-    fetchStoryFeeds();
+    handleFeeds();
   }, [])
   return (
     <div className="flex flex-col gap-8">
-      {feed.map((f) => {
+      {feed?.map((f) => {
         return (
           <div key={f.story_id}>
             <Card className="w-[50rem]">
-              <CardContent className="p-8 -mb-8 flex justify-start items-center gap-8">
+              <CardContent className="p-8 -mb-8 flex justify-start items-center gap-4">
                 <Avatar>
                   <AvatarImage src="https://github.com/shadcn.png" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
+                <p>{f.profiles?.username}</p>
                 <div>
-                  {f.profiles?.username}
                 </div>
               </CardContent>
               <CardHeader>
@@ -81,8 +64,8 @@ const FeedsCard = () => {
           </div>
         )
       })}
-
     </div>
+    // <div>Hello</div>
   )
 }
-export default FeedsCard
+export default FeedsCard;
