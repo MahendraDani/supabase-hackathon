@@ -6,11 +6,31 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { cookies } from "next/headers"
 import { ModeToggle } from "../theme/theme";
+
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+
 
 export default async function ProtectedNavbar() {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -21,56 +41,92 @@ export default async function ProtectedNavbar() {
   const { data } = await supabase.from("profiles").select(`username,full_name`).eq("user_id", user?.id);
   const username = data[0]?.username;
   const full_name = data[0]?.full_name;
-  const ProfileMenuOptions = [
+
+  const sidebarOptions = [
     {
-      "href": `/${username}`,
-      "itemName": "Profile"
+      href: `/${username}`,
+      itemName: "Profile"
     },
     {
-      "href": `/feeds`,
-      "itemName": "Feeds"
+      href: `/feeds`,
+      itemName: "Feeds"
     },
     {
-      "href": `/${username}/drafts`,
-      "itemName": "Drafts"
+      href: `/${username}/drafts`,
+      itemName: "Drafts"
     },
     {
-      "href": `/${username}/reads`,
-      "itemName": "Reads"
+      href: `/${username}/reads`,
+      itemName: "Reads"
     },
     {
-      "href": `/${username}/favourites`,
-      "itemName": "Favourites"
+      href: `/${username}/favourites`,
+      itemName: "Favourites"
     },
     {
-      "href": `/${username}/logout`,
-      "itemName": "Log out"
+      href: `/${username}/general`,
+      itemName: "General",
     },
-  ]
+    {
+      href: `/${username}/account`,
+      itemName: "Account",
+    }, {
+      href: `/${username}/location`,
+      itemName: "Location"
+    },
+    {
+      href: `/${username}/socials`,
+      itemName: "My Socials"
+    },
+    {
+      href: `/${username}/activity`,
+      itemName: "My Activity"
+    },
+    {
+      href: `/${username}/logout`,
+      itemName: "Log out"
+    },
+  ];
   return (
     <div className="w-full flex justify-center items-center">
       <nav className="w-full md:w-[85%] bg-green-50 p-4 px-6 flex justify-between items-center">
         <div>Rhymes and Fables</div>
         <div className="flex justify-start gap-4 items-center">
           <ModeToggle />
-          <DropdownMenu>
-            <DropdownMenuTrigger>
+          <Sheet>
+            <SheetTrigger>
               <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>{full_name}</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {ProfileMenuOptions.map((item) => {
-                return (
-                  <ProfileDropDownItem key={1} href={item.href} itemName={item.itemName} />
-                )
-              })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <div className="mt-4 flex justify-start items-center gap-4">
+                  <Image src={"https://github.com/shadcn.png"} alt="Profile image" width={64} height={64} className="rounded-full" />
+                  <div className="flex flex-col ">
+                    <p>{full_name}</p>
+                    <p className="text-sm">{`@${username}`}</p>
+                  </div>
+                </div>
+              </SheetHeader>
+              <SheetDescription className="mt-3">
+                <div className="p-2 flex flex-col justify-start items-start gap-2">
+                  {sidebarOptions.map((item) => {
+                    return (
+                      <div key={1}>
+                        <Link href={item.href}>
+                          <SheetClose>
+                            <Button variant="outline" className="min-w-[20rem]">{item.itemName}</Button>
+                          </SheetClose>
+                        </Link>
+                      </div>
+                    )
+                  })}
+                </div>
+              </SheetDescription>
+            </SheetContent>
+          </Sheet>
         </div>
       </nav>
     </div>
