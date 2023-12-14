@@ -38,7 +38,7 @@ export default async function Sidebar() {
     }
   ]
   return (
-    <aside className="min-h-[35rem] p-4 w-1/4 bg-red-50">
+    <aside className="hidden md:flex min-h-[35rem] p-4 w-1/4 bg-red-50">
       <section className="flex flex-col gap-4 justify-start items-center">
         <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
           My Profile

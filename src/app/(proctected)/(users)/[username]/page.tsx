@@ -4,6 +4,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { QueryData } from "@supabase/supabase-js";
 import { cookies } from "next/headers"
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import Link from "next/link";
 
 interface ProfilePageProps {
   params: {
@@ -51,39 +52,102 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       name: "Date "
     }
   ]
+  const socials = [
+    {
+      src: "/icons/linkedin.svg",
+      href: "https://linkedin.com/in/mahendra-dani",
+      alt: "Linkedin"
+    },
+    {
+      src: "/icons/github.svg",
+      href: "https://github.com/MahendraDani",
+      alt: "Github"
+    }, {
+      src: "/icons/medium.svg",
+      href: "https://medium.com/MahendraDani",
+      alt: "Medium"
+    }, {
+      src: "/icons/twitterx.svg",
+      href: "https://twitter.com/@MahendraDani09",
+      alt: "Twitter"
+    }, {
+      src: "/icons/hashnode.svg",
+      href: "https://hashnode.com/Mahendra09",
+      alt: "Hashnode"
+    }
+  ]
   return (
     <div>
       <div className="mt-6 w-full flex justify-center items-center">
-        <div className="w-[85%] flex justify-between items-start gap-8">
-          <Sidebar />
-          <div className="w-3/4 border-2 border-slate-50 min-h-[35rem] flex flex-col justify-start items-start gap-4">
-            <h3 className="p-4 scroll-m-20 text-2xl font-semibold tracking-tight">
-              My Profile
-            </h3>
-            <section className="w-full flex justify-start items-start gap-6">
-              <aside className="grow-1 p-4 border-r-[1px] border-slate-100 min-h-[30rem]">
-                <div className="flex flex-col justify-start items-start gap-8">
-                  <div className="w-full flex flex-col gap-2 justify-center items-center pr-6">
-                    <Image src="https://github.com/shadcn.png" className="rounded-full border-4 border-slate-600" width={168} height={168} alt="Profile image" />
-                    <p>Mahendra Dani</p>
-                  </div>
-                  <div className="flex justify-start items-start gap-2 flex-col">
-                    {ProfileSidebarOptions.map((item) => {
-                      return (
-                        <div key={1} >
-                          <ProfileSectionItem src={item.src} alt={item.alt} name={item.name} />
+        <section className="w-full p-4 md:px-8 md:w-[80%] min-h-[35rem] flex flex-col md:flex-row justify-start items-center md:justify-start md:items-start gap-2 md:gap-16 bg-red-50">
+          <aside>
+            <div className="pt-4 pb-2 w-[85%] md:w-fit flex justify-center md:justify-center items-center md:flex-col gap-4">
+              <Image src="https://github.com/shadcn.png" className="md:hidden rounded-full border-4 border-slate-600" width={64} height={64} alt="Profile image" />
+              <Image src="https://github.com/shadcn.png" className="hidden md:block rounded-full border-4 border-slate-600" width={168} height={168} alt="Profile image" />
+              <div>
+                <p className="text-xl md:text-lg">Mahendra Dani</p>
+                <p className="text-sm md:hidden">Tagline</p>
+              </div>
+            </div>
+            <div className="py-2 flex flex-col justify-center items-center gap-4 md:hidden">
+              <h3 className="text-center text-lg font-semibold">About</h3>
+              <p className="text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas rem vel ab sit omnis aspernatur numquam iure earum quasi consequuntur!</p>
+            </div>
+            <div className="py-2">
+              <h3 className="text-center text-lg font-semibold md:hidden pb-2">General</h3>
+              <div className="flex flex-col justify-start items-start gap-2">
+                {ProfileSidebarOptions.map((item) => {
+                  return (
+                    <div key={1} >
+                      <ProfileSectionItem src={item.src} alt={item.alt} name={item.name} />
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+            <div className="py-2 md:hidden">
+              <h3 className="text-center text-lg font-semibold md:hidden pb-4">Socials</h3>
+              <div className="flex justify-center items-center gap-4">
+                {socials.map((item) => {
+                  return (
+                    <div key={1}>
+                      <Link href={item.href} target="blank" className="cursor-pointer">
+                        <Image src={item.src} width={32} height={32} alt={item.alt} />
+                      </Link>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </aside>
+
+          {/* RIght side */}
+          <aside className="hidden md:flex flex-col justify-start items-start gap-4 pt-4">
+            <div className="flex justify-start items-start gap-3 flex-col pb-3">
+              <h3 className="text-xl font-semibold">About</h3>
+              <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum ratione ipsa, aliquam autem totam tempore praesentium, impedit corporis officiis amet voluptas suscipit nulla. Deserunt aspernatur rerum perferendis beatae, praesentium amet!</p>
+            </div>
+            <div className="flex justify-start items-start gap-3 flex-col">
+              <h3 className="text-xl font-semibold pb-3">Socials</h3>
+              <div className="flex flex-col justify-start items-start gap-3">
+                {socials.map((item) => {
+                  return (
+                    <div key={1}>
+                      <Link href={item.href} target="blank" className="cursor-pointer">
+                        <div className="flex justify-start items-center gap-3">
+                          <Image src={item.src} width={24} height={24} alt={item.alt} />
+                          <p className="text-[1rem] hover:underline text-slate-600">{item.href}</p>
                         </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              </aside>
-              <aside className="grow-[3] min-h-[30rem]">Right</aside>
-            </section>
-          </div>
-        </div>
+                      </Link>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </aside>
+        </section>
       </div>
-    </div>
+    </div >
   )
 }
 
