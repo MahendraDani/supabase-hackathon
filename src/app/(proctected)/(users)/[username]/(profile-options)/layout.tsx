@@ -15,10 +15,7 @@ export const metadata: Metadata = {
 const ProfilePageLayout = ({ children }: ProfileOptionsPageLayoutProps) => {
   return (
     <div className="mt-6 w-full flex justify-center items-center">
-      <div className="w-[85%] flex justify-between items-start gap-8">
-        <Sidebar />
-        <div className="w-3/4 bg-green-100 min-h-[35rem] p-4">{children}</div>
-      </div>
+      <div className="w-full bg-green-100 min-h-[35rem] p-4">{children}</div>
     </div>
   )
 }

@@ -24,7 +24,8 @@ export default async function Feeds() {
   const poemFeeds = await fetchPoemFeeds();
   const quoteFeeds = await fetchQuoteFeeds();
 
-  const feeds = [...poemFeeds, ...storyFeeds, ...quoteFeeds];
+  const allFeeds = [];
+  const feeds = [...poemFeeds, ...quoteFeeds, ...storyFeeds];
   const mixedFeeds = shuffleArray(feeds);
   return (
     <div>
@@ -63,6 +64,7 @@ export default async function Feeds() {
           })
         }
       </div>
+      {/* {JSON.stringify(quoteFeeds, null, 2)} */}
     </div>
   )
 }

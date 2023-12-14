@@ -1,18 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
@@ -25,7 +14,6 @@ import {
   SheetContent,
   SheetDescription,
   SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import Image from "next/image";
@@ -64,23 +52,12 @@ export default async function ProtectedNavbar() {
       itemName: "Favourites"
     },
     {
-      href: `/${username}/general`,
-      itemName: "General",
-    },
-    {
-      href: `/${username}/account`,
-      itemName: "Account",
-    }, {
-      href: `/${username}/location`,
-      itemName: "Location"
-    },
-    {
-      href: `/${username}/socials`,
-      itemName: "My Socials"
-    },
-    {
       href: `/${username}/activity`,
       itemName: "My Activity"
+    },
+    {
+      href: `/${username}/settings`,
+      itemName: "Settings",
     },
     {
       href: `/${username}/logout`,
