@@ -10,6 +10,7 @@ import {
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { cookies } from "next/headers"
+import { ModeToggle } from "../theme/theme";
 
 export default async function ProtectedNavbar() {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -49,7 +50,8 @@ export default async function ProtectedNavbar() {
     <div className="w-full flex justify-center items-center">
       <nav className="w-full md:w-[85%] bg-green-50 p-4 px-6 flex justify-between items-center">
         <div>Rhymes and Fables</div>
-        <div>
+        <div className="flex justify-start gap-4 items-center">
+          <ModeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>
