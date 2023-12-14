@@ -13,9 +13,9 @@ export const metadata: Metadata = {
 
 const ProfilePageLayout = ({ children }: ProfilePageLayoutProps) => {
   return (
-    <>
+    <div className="bg-red-100">
       {children}
-    </>
+    </div>
   )
 }
 export default ProfilePageLayout;
