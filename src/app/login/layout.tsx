@@ -1,3 +1,4 @@
+import Navbar from '@/components/custom/navbar/navbar'
 import type { Metadata } from 'next'
 import { ReactNode } from 'react'
 export const metadata: Metadata = {
@@ -11,8 +12,11 @@ type SignupPageLayoutProps = {
 
 export default function SignupPageLayout({ children }: SignupPageLayoutProps) {
   return (
-    <div className='w-full min-h-[40rem] flex justify-center items-center'>
-      {children}
+    <div>
+      <Navbar />
+      <div className='w-full min-h-[40rem] flex justify-center items-center'>
+        {children}
+      </div>
     </div>
   )
 }

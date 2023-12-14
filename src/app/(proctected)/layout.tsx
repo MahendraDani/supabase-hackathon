@@ -2,6 +2,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers"
 import { Metadata } from "next"
 import { ReactNode } from "react"
+import ProtectedNavbar from "@/components/custom/navbar/proctected-navbar";
 
 interface ProctectedPagesLayoutProps {
   children: ReactNode
@@ -17,6 +18,7 @@ export default async function ProctectedPagesLayout({ children }: ProctectedPage
   if (user) {
     return (
       <div className="bg-red-100">
+        <ProtectedNavbar />
         {children}
       </div>
     )
