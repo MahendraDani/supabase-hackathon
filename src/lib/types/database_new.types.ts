@@ -122,7 +122,6 @@ export interface Database {
           comment_count: number | null
           created_at: string | null
           entity_id: string
-          entity_type: string
           genre: string | null
           is_published: boolean | null
           like_count: number | null
@@ -137,7 +136,6 @@ export interface Database {
           comment_count?: number | null
           created_at?: string | null
           entity_id?: string
-          entity_type?: string
           genre?: string | null
           is_published?: boolean | null
           like_count?: number | null
@@ -152,7 +150,6 @@ export interface Database {
           comment_count?: number | null
           created_at?: string | null
           entity_id?: string
-          entity_type?: string
           genre?: string | null
           is_published?: boolean | null
           like_count?: number | null
@@ -374,13 +371,11 @@ export interface Database {
           comment_count: number | null
           created_at: string | null
           entity_id: string
-          entity_type: string
           genre: string | null
           is_published: boolean | null
           like_count: number | null
           quote: Json | null
           read_count: number | null
-          title: string | null
           updated_at: string | null
           user_id: string
           written_by: string | null
@@ -390,13 +385,11 @@ export interface Database {
           comment_count?: number | null
           created_at?: string | null
           entity_id?: string
-          entity_type?: string
           genre?: string | null
           is_published?: boolean | null
           like_count?: number | null
           quote?: Json | null
           read_count?: number | null
-          title?: string | null
           updated_at?: string | null
           user_id: string
           written_by?: string | null
@@ -406,13 +399,11 @@ export interface Database {
           comment_count?: number | null
           created_at?: string | null
           entity_id?: string
-          entity_type?: string
           genre?: string | null
           is_published?: boolean | null
           like_count?: number | null
           quote?: Json | null
           read_count?: number | null
-          title?: string | null
           updated_at?: string | null
           user_id?: string
           written_by?: string | null
@@ -433,7 +424,6 @@ export interface Database {
           comment_count: number | null
           created_at: string | null
           entity_id: string
-          entity_type: string
           genre: string | null
           is_published: boolean | null
           like_count: number | null
@@ -448,7 +438,6 @@ export interface Database {
           comment_count?: number | null
           created_at?: string | null
           entity_id?: string
-          entity_type?: string
           genre?: string | null
           is_published?: boolean | null
           like_count?: number | null
@@ -463,7 +452,6 @@ export interface Database {
           comment_count?: number | null
           created_at?: string | null
           entity_id?: string
-          entity_type?: string
           genre?: string | null
           is_published?: boolean | null
           like_count?: number | null

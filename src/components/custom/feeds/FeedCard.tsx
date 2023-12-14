@@ -100,7 +100,7 @@ const FeedsCard = () => {
       <div className="flex flex-col gap-8">
         {feed?.stories?.map((f) => {
           return (
-            <div key={f.story_id}>
+            <div key={f.entity_id}>
               <Card className="w-[50rem]">
                 <CardContent className="p-8 w-full -mb-8 flex justify-between items-center">
                   <div className="flex justify-start items-center gap-4">
@@ -109,9 +109,10 @@ const FeedsCard = () => {
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <p>{f.profiles?.username}</p>
+                    <p>{f.entity_type}</p>
                   </div>
                   <div>
-                    <Link href={`/feeds/${f.story_id}`}>
+                    <Link href={`/feeds/${f.entity_id}`}>
                       Read
                     </Link>
                   </div>
@@ -132,7 +133,7 @@ const FeedsCard = () => {
       <div className="flex flex-col gap-8">
         {feed?.poems?.map((f) => {
           return (
-            <div key={f.poem_id}>
+            <div key={f.entity_id}>
               <Card className="w-[50rem]">
                 <CardContent className="p-8 w-full -mb-8 flex justify-between items-center">
                   <div className="flex justify-start items-center gap-4">
@@ -141,9 +142,10 @@ const FeedsCard = () => {
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <p>{f.profiles?.username}</p>
+                    <p>{f.entity_type}</p>
                   </div>
                   <div>
-                    <Link href={`/feeds/${f.poem_id}`}>
+                    <Link href={`/feeds/${f.entity_id}`}>
                       Read
                     </Link>
                   </div>
@@ -164,7 +166,7 @@ const FeedsCard = () => {
       <div className="flex flex-col gap-8">
         {feed?.quotes?.map((f) => {
           return (
-            <div key={f.quote_id}>
+            <div key={f.entity_id}>
               <Card className="w-[50rem]">
                 <CardContent className="p-8 w-full -mb-8 flex justify-between items-center">
                   <div className="flex justify-start items-center gap-4">
@@ -173,16 +175,17 @@ const FeedsCard = () => {
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <p>{f.profiles?.username}</p>
+                    <p>{f.entity_type}</p>
                   </div>
                   <div>
-                    <Link href={`/feeds/${f.quote_id}`}>
+                    <Link href={`/feeds/${f.entity_id}`}>
                       Read
                     </Link>
                   </div>
                 </CardContent>
                 <CardHeader>
-                  <CardTitle>{f.written_by}</CardTitle>
-                  <CardDescription>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta debitis voluptas eligendi neque deleniti quasi, enim qui in iusto fuga.</CardDescription>
+                  <CardTitle>{f.title}</CardTitle>
+                  <CardDescription> Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta debitis voluptas eligendi neque deleniti quasi, enim qui in iusto fuga.</CardDescription>
                 </CardHeader>
                 <CardFooter className="flex justify-start items-center gap-4 text-slate-600">
                   <p>{`Likes ${f.like_count}`}</p>
