@@ -17,10 +17,13 @@ export default async function ProctectedPagesLayout({ children }: ProctectedPage
   const { data: { user }, error } = await supabase.auth.getUser();
   if (user) {
     return (
-      <div className="bg-red-100">
+      <div>
         <ProtectedNavbar />
-        {children}
+        <div className="p-4">
+          {children}
+        </div>
       </div>
+
     )
   } else {
     return (

@@ -18,8 +18,9 @@ export default async function ProtectedNavbar() {
   if (error) {
     JSON.stringify(error, null, 2);
   }
-  const { data } = await supabase.from("profiles").select("username").eq("user_id", user?.id);
+  const { data } = await supabase.from("profiles").select(`username,full_name`).eq("user_id", user?.id);
   const username = data[0]?.username;
+  const full_name = data[0]?.full_name;
   const ProfileMenuOptions = [
     {
       "href": `/${username}`,
@@ -60,7 +61,7 @@ export default async function ProtectedNavbar() {
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>{full_name}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {ProfileMenuOptions.map((item) => {
                 return (
