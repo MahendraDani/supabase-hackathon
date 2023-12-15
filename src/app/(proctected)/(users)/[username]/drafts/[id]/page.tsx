@@ -26,21 +26,29 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 
-export default async function DraftPage() {
-  // const supabase = createServerComponentClient({ cookies });
-  // const { data: { user } } = await supabase.auth.getUser();
-  // const { data } = await supabase.from("profiles").select("username").eq("user_id", user.id);
-  // const username = data[0].username;
+interface DraftsPageInterface {
+  params: {
+    id: string;
+  }
+}
+
+export default async function DraftPage({ params }: DraftsPageInterface) {
+  function trimString(inputString: string, maxLength: number): string {
+    if (inputString.length > maxLength) {
+      return inputString.substring(0, maxLength - 3) + '...';
+    } else {
+      return inputString;
+    }
+  }
+
+  const supabase = createServerComponentClient({ cookies });
+  const { data: { user } } = await supabase.auth.getUser();
+  const { data } = await supabase.from("profiles").select("username").eq("user_id", user.id);
+  const username = data[0].username;
 
   const handleCreateNewDraft = async (formData: FormData) => {
     "use server";
     const supabase = createServerActionClient({ cookies });
-    const { data: { user }, error } = await supabase.auth.getUser();
-    const profileResponse = await supabase.from("profiles").select("username").eq("user_id", user.id);
-    if (profileResponse.error) {
-      console.log("Error in fetching username")
-      return;
-    }
     const inputEntityType = formData.get("entity_type").toString();
     if (inputEntityType === "story") {
       const { data, error } = await supabase.from("stories").insert([{ "title": "untitled", "user_id": user.id }]).select();
@@ -50,7 +58,7 @@ export default async function DraftPage() {
       }
       const entity_id = data[0].entity_id;
 
-      redirect(`/${profileResponse.data[0].username}/drafts/${entity_id}`);
+      redirect(`/${username}/drafts/${entity_id}`);
     } else if (inputEntityType === "poem") {
       const { data, error } = await supabase.from("poems").insert([{ "title": "untitled", "user_id": user.id }]).select();
       if (error) {
@@ -59,7 +67,7 @@ export default async function DraftPage() {
       }
       const entity_id = data[0].entity_id;
 
-      redirect(`/${profileResponse.data[0].username}/drafts/${entity_id}`);
+      redirect(`/${username}/drafts/${entity_id}`);
     } else if (inputEntityType === "quote") {
       const { data, error } = await supabase.from("quotes").insert([{ "title": "untitled", "user_id": user.id }]).select();
       if (error) {
@@ -68,7 +76,7 @@ export default async function DraftPage() {
       }
       const entity_id = data[0].entity_id;
 
-      redirect(`/${profileResponse.data[0].username}/drafts/${entity_id}`);
+      redirect(`/${username}/drafts/${entity_id}`);
     } else {
       toast({
         title: "Please select a valid option!",
@@ -77,23 +85,40 @@ export default async function DraftPage() {
       return;
     }
   }
-  // const drafts = [
-  //   {
-  //     href: `/${username}/draft-id`,
-  //     title: 'Name of it',
-  //     type: "entity_type",
-  //   }
-  // ]
 
-  /**
-   * 1. Get userid first
-   * 2. Then get the username
-   * 3. Insert a new row in the content bucket based on kajdskfjdf
-   * 
-   */
+  const storiesResponse = await supabase.from("stories").select(`entity_type,entity_id,title`).eq("is_published", false);
+  if (storiesResponse.error) {
+    console.log("Error from stories fetchin");
+    return;
+  }
+  const poemsRepsonse = await supabase.from("poems").select(`entity_type,entity_id,title`).eq("is_published", false);
+  if (poemsRepsonse.error) {
+    console.log("Error in fetching poems");
+    return;
+  }
+  const quotesRespnse = await supabase.from("quotes").select(`entity_type,entity_id,title`).eq("is_published", false);
+  if (poemsRepsonse.error) {
+    console.log("error in fetching quotes");
+  }
+  let allDrafts = [...storiesResponse.data, ...poemsRepsonse.data, ...quotesRespnse.data];
+  // console.log(allDrafts);
 
-  // TODO : Editor will be shown here
-  // TODO : Sidebar in drafts section will be diferent
+  let sidebarOptions = [];
+  const currentDraft: { entity_type?: string; title?: string; entity_id?: string; } = {}
+  allDrafts.forEach((draft) => {
+    if (params.id === draft.entity_id) {
+      currentDraft.entity_id = draft.entity_id;
+      currentDraft.entity_type = draft.entity_type;
+      currentDraft.title = draft.title;
+    }
+    sidebarOptions.push({
+      href: `/${username}/drafts/${draft.entity_id}`,
+      title: draft.title,
+      entity_type: draft.entity_type
+    })
+  })
+
+
   return (
     <section className="md:mt-4 relative w-full md:flex md:justify-start md:items-start md:gap-4">
       {/* Sidebar */}
@@ -101,7 +126,7 @@ export default async function DraftPage() {
         <h2 className="w-full grid place-content-center">My Drafts</h2>
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="w-full rounded-full" variant="outline">New Draft</Button>
+            <Button className="w-full rounded-md" variant="secondary">New Draft</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px] py-4">
             <DialogHeader className="mb-4">
@@ -124,14 +149,21 @@ export default async function DraftPage() {
                 <Button type="submit">Write</Button>
               </form>
             </DialogDescription>
-            {/* <DialogFooter>
-            </DialogFooter> */}
           </DialogContent>
         </Dialog>
 
-        <Link href={"/username/drafts/3"}>
-          <p>The rabbit and the heir</p>
-        </Link>
+        <div className="w-full flex flex-col justify-start items-start gap-2">
+          {sidebarOptions.map((item) => {
+            const slicedItemName = trimString(item.title, 15);
+            return (
+              <div key={1}>
+                <Link href={item.href}>
+                  <Button variant="outline" className="py-[0.5px] min-w-[16rem] rounded-md max-w-[15rem]">{slicedItemName}</Button>
+                </Link>
+              </div>
+            )
+          })}
+        </div>
       </aside>
       <section className="md:w-4/5 md:fixed md:left-72 md:px-8" >
         <form className="flex flex-col justify-start items-start gap-5">
@@ -141,7 +173,7 @@ export default async function DraftPage() {
           <div className="w-full">
             <h1>
               {/* <Input placeholder="Title" className="border-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0" /> */}
-              <Textarea placeholder="Title here..." className="min-h-12 overflow-hidden focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:w-[80%] text-4xl font-bold" />
+              <Textarea placeholder="Title here..." defaultValue={currentDraft.title} className="min-h-12 overflow-hidden focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:w-[80%] text-4xl font-bold" />
             </h1>
             <p>
               <Textarea placeholder="Once upon a time..." className="min-h-[40rem] focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:w-[80%] text-lg" />
@@ -152,5 +184,3 @@ export default async function DraftPage() {
     </section>
   )
 }
-
-// On click new draft a new entity should be inserted in the db with title as untitiled and the user should be re-routed to /username/drafts/id
