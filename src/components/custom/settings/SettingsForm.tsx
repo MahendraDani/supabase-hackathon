@@ -1,46 +1,41 @@
+"use server";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { createClientComponentClient, createServerActionClient, createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import { cookies } from "next/headers"
 
-
-export default async function SettingsPage() {
-  const supabase = createServerComponentClient({ cookies });
+export default async function SettingsForm() {
+  const supabase = createServerComponentClient<Database>({ cookies });
   const { data: { user } } = await supabase.auth.getUser();
-
-  const { data } = await supabase.from("profiles").select("*").eq("user_id", user.id);
-  // console.log(data);
-
+  const { data, error } = await supabase.from("profiles").select("*").eq("user_id", user.id);
+  if (error) {
+    console.log("Server in fetching profiles data from settings page");
+    return;
+  }
   const handleForm = async (formData: FormData) => {
     "use server";
-    const supabase = createServerActionClient<Database>({ cookies })
-    const { data, error } = await supabase.from("profiles")
-      .update(
-        {
-          tagline: formData.get("tagline").toString(),
-          gender: formData.get("gender").toString(),
-          about: formData.get("about").toString(),
-          city: formData.get("city").toString(),
-          country: formData.get("country").toString(),
-          linkedin_url: formData.get("linkedin").toString(),
-          twitter_url: formData.get("twitter").toString(),
-          github_url: formData.get("github").toString(),
-          hashnode_url: formData.get("hashnode").toString(),
-          medium_url: formData.get("medium").toString()
-        }
-      ).eq("user_id", user.id);
+    const city = formData.get("city").toString();
+    const supabase = createServerComponentClient({ cookies });
+    const { data, error } = await supabase
+      .from("profiles")
+      .update({ city })
+      .eq("user_id", user.id);
     if (error) {
-      console.log(error);
+      console.log("err in updating");
     }
+    console.log("SUCCESS _-------------------------------");
+    console.log(data);
+    console.log("Happy?");
+  };
 
-  }
   return (
     <section className="p-2">
-      <form action={handleForm} className="flex flex-col md:flex-row md:gap-8 justify-center items-center md:justify-start md:items-start gap-4">
+      <form className="flex flex-col md:flex-row md:gap-8 justify-center items-center md:justify-start md:items-start gap-4">
         <section className="w-full md:w-1/2">
           <h2 className="text-center md:text-left mt-10 scroll-m-20 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
             Profile Settings
@@ -61,10 +56,21 @@ export default async function SettingsPage() {
               <Input placeholder="jhon9892" disabled name="username" defaultValue={data[0].username} />
             </div>
             {/* </div> */}
-
+            {/* <div className="w-full flex flex-col justify-start items-start gap-2">
+              <Label>Email</Label>
+              <Input placeholder="Email here ..." disabled name="email" />
+            </div> */}
+            {/* <div className="w-full flex flex-col justify-start items-start gap-2">
+              <Label>Password</Label>
+              <Input placeholder="Email here ..." disabled name="password" type="password" />
+            </div> */}
+            <div className="w-full flex flex-col justify-start items-start gap-2">
+              <Label>About</Label>
+              <Textarea defaultValue={data[0].about} name="about" placeholder="I am ...." />
+            </div>
             <div className="w-full flex flex-col justify-start items-start gap-2">
               <Label>Tagline</Label>
-              <Input placeholder="I am .... and I like to ..." name="tagline" defaultValue={data[0].tagline} />
+              <Input placeholder="Tagline here ..." name="tagline" defaultValue={data[0].tagline} />
             </div>
             <div className="w-full flex flex-col justify-start items-start gap-2">
               <Label>Gender</Label>
@@ -79,37 +85,33 @@ export default async function SettingsPage() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="w-full flex flex-col justify-start items-start gap-2">
-              <Label>About</Label>
-              <Textarea defaultValue={data[0].about} name="about" />
-            </div>
           </div>
         </section>
         <section className="w-full md:mt-6 md:w-1/2 flex flex-col justify-start items-start gap-4">
 
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <Label>City</Label>
-            <Input placeholder="Mumbai" name="city" defaultValue={data[0].city} />
+            <Input placeholder="Your city" name="city" defaultValue={data[0].city} />
           </div>
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <Label>Country</Label>
-            <Input placeholder="India" name="country" defaultValue={data[0].country} />
+            <Input placeholder="Your country" name="country" defaultValue={data[0].country} />
           </div>
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <Label>Linkedin</Label>
-            <Input placeholder="Your Linkedin profile" name="linkedin" defaultValue={data[0].linkedin_url} />
+            <Input name="linkdedin" defaultValue={data[0].linkedin_url} />
           </div>
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <Label>Twitter</Label>
-            <Input placeholder="Your Twitter profile" name="twitter" defaultValue={data[0].twitter_url} />
+            <Input placeholder="Your twitter(X) profile" name="twitter" defaultValue={data[0].twitter_url} />
           </div>
           <div className="w-full  flex flex-col justify-start items-start gap-2">
             <Label>Github</Label>
-            <Input placeholder="Your GitHub profile" name="github" defaultValue={data[0].github_url} />
+            <Input placeholder="Your github profile" name="github" defaultValue={data[0].github_url} />
           </div>
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <Label>Hashnode</Label>
-            <Input placeholder="Your Hashnode profile" name="hashnode" defaultValue={data[0].hashnode_url} />
+            <Input placeholder="Your hashnode profile" name="hashnode" defaultValue={data[0].hashnode_url} />
           </div>
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <Label>Medium</Label>
