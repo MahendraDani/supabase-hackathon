@@ -30,6 +30,15 @@ export default async function ProtectedNavbar() {
   const username = data[0]?.username;
   const full_name = data[0]?.full_name;
 
+  let redirectDraftHref: string = "";
+  const storiesResponse = await supabase.from("stories").select(`entity_type,entity_id,title`).eq("is_published", false).eq("user_id", user.id);
+  if (storiesResponse.error) {
+    console.log(storiesResponse.error);
+  }
+  if (storiesResponse.data) {
+    redirectDraftHref = storiesResponse.data[0].entity_id;
+  }
+
   const sidebarOptions = [
     {
       href: `/${username}`,
@@ -40,8 +49,8 @@ export default async function ProtectedNavbar() {
       itemName: "Feeds"
     },
     {
-      href: `/${username}/drafts/1`,
-      itemName: "Drafts"
+      href: `/${username}/drafts/${redirectDraftHref}`,
+      itemName: "Drafts",
     },
     {
       href: `/${username}/reads`,
