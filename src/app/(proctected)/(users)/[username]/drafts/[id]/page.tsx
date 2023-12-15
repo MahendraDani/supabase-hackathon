@@ -86,17 +86,17 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
     }
   }
 
-  const storiesResponse = await supabase.from("stories").select(`entity_type,entity_id,title`).eq("is_published", false).eq("user_id", user.id);
+  const storiesResponse = await supabase.from("stories").select(`entity_type,entity_id,title,content`).eq("is_published", false).eq("user_id", user.id);
   if (storiesResponse.error) {
     console.log("Error from stories fetchin");
     return;
   }
-  const poemsRepsonse = await supabase.from("poems").select(`entity_type,entity_id,title`).eq("is_published", false).eq("user_id", user.id);
+  const poemsRepsonse = await supabase.from("poems").select(`entity_type,entity_id,title,content`).eq("is_published", false).eq("user_id", user.id);
   if (poemsRepsonse.error) {
     console.log("Error in fetching poems");
     return;
   }
-  const quotesRespnse = await supabase.from("quotes").select(`entity_type,entity_id,title`).eq("is_published", false).eq("user_id", user.id);
+  const quotesRespnse = await supabase.from("quotes").select(`entity_type,entity_id,title,content`).eq("is_published", false).eq("user_id", user.id);
   if (poemsRepsonse.error) {
     console.log("error in fetching quotes");
   }
@@ -104,12 +104,13 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
   // console.log(allDrafts);
 
   let sidebarOptions = [];
-  const currentDraft: { entity_type?: string; title?: string; entity_id?: string; } = {}
+  const currentDraft: { entity_type?: string; title?: string; entity_id?: string; content?: string } = {}
   allDrafts.forEach((draft) => {
     if (params.id === draft.entity_id) {
       currentDraft.entity_id = draft.entity_id;
       currentDraft.entity_type = draft.entity_type;
       currentDraft.title = draft.title;
+      currentDraft.content = draft.content;
     }
     sidebarOptions.push({
       href: `/${username}/drafts/${draft.entity_id}`,
@@ -125,10 +126,48 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
       const storiesPostResponse = await supabase.from("stories").update({ "title": formData.get("title").toString(), "content": formData.get("content").toString() }).eq("entity_id", currentDraft.entity_id).select();
       if (storiesPostResponse.error) {
         console.log(storiesPostResponse.error)
+        return;
       }
-      console.log(storiesPostResponse.data)
     }
-    // console.log(formData);
+    else if (currentDraft.entity_type === "poem") {
+      const poemsPostResponse = await supabase.from("poems").update({ "title": formData.get("title").toString(), "content": formData.get("content").toString() }).eq("entity_id", currentDraft.entity_id).select();
+      if (poemsPostResponse.error) {
+        console.log(poemsPostResponse.error)
+        return;
+      }
+    } else if (currentDraft.entity_type === "quote") {
+      const quotePostResponse = await supabase.from("quotes").update({ "title": formData.get("title").toString(), "content": formData.get("content").toString() }).eq("entity_id", currentDraft.entity_id).select();
+      if (quotePostResponse.error) {
+        console.log(quotePostResponse.error)
+        return;
+      }
+    }
+  }
+
+  const handleFinalPost = async (formData: FormData) => {
+    "use server";
+    const supabase = createServerActionClient({ cookies });
+    if (currentDraft.entity_type === "story") {
+      const storiesPostResponse = await supabase.from("stories").update({ "is_published": true }).eq("entity_id", currentDraft.entity_id).select();
+      if (storiesPostResponse.error) {
+        console.log(storiesPostResponse.error)
+        return;
+      }
+    }
+    else if (currentDraft.entity_type === "poem") {
+      const poemsPostResponse = await supabase.from("poems").update({ "is_published": true }).eq("entity_id", currentDraft.entity_id).select();
+      if (poemsPostResponse.error) {
+        console.log(poemsPostResponse.error)
+        return;
+      }
+    } else if (currentDraft.entity_type === "quote") {
+      const quotePostResponse = await supabase.from("quotes").update({ "is_published": true }).eq("entity_id", currentDraft.entity_id).select();
+      if (quotePostResponse.error) {
+        console.log(quotePostResponse.error)
+        return;
+      }
+    }
+    redirect("/feeds");
   }
 
   return (
@@ -164,13 +203,13 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
           </DialogContent>
         </Dialog>
 
-        <div className="w-full flex flex-col justify-start items-start gap-2">
+        <div className="w-full flex flex-col justify-start items-center gap-2">
           {sidebarOptions.map((item) => {
             const slicedItemName = trimString(item.title, 15);
             return (
               <div key={1}>
                 <Link href={item.href}>
-                  <Button variant="outline" className="py-[0.5px] min-w-[16rem] rounded-md max-w-[15rem]">{slicedItemName}</Button>
+                  <Button variant="outline" className="py-[0.5px] md:min-w-[12rem] rounded-md max-w-[15rem]">{slicedItemName}</Button>
                 </Link>
               </div>
             )
@@ -187,12 +226,33 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
               <Textarea placeholder="Title here..." name="title" defaultValue={currentDraft.title} className="min-h-12 overflow-hidden focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:w-[80%] text-4xl font-bold" />
             </h1>
             <p>
-              <Textarea placeholder="Once upon a time..." name="content" defaultValue={"Once upon a time in ..."} className="min-h-[400rem] focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:w-[80%] text-lg" />
+              <Textarea placeholder="Once upon a time..." name="content" defaultValue={!currentDraft.content ? "Write your story here" : currentDraft.content} className="min-h-[400rem] focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:w-[80%] text-lg" />
             </p>
           </div>
 
-          <Button variant="outline" className="fixed right-20">Publish</Button>
+          <Button variant="outline" className="hidden md:block fixed right-20 w-[12rem]">Save</Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="rounded-md hidden md:block md:fixed top-40 right-20 w-[12rem]" variant="secondary">Publish</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px] py-4">
+              <DialogHeader className="mb-4 ">
+                <DialogTitle>Do you really want to post?</DialogTitle>
+              </DialogHeader>
+              <DialogDescription className="mb-4 flex flex-col justify-start items-start gap-3">
+                <p>Once published this post will be visible to all.</p>
+                <div className="w-full flex items-end justify-end gap-3">
+                  <DialogClose><Button variant="outline">Cancel</Button></DialogClose>
+                  <form action={handleFinalPost}>
+                    <DialogClose><Button type="submit">Publish</Button></DialogClose>
+                  </form>
+                </div>
+              </DialogDescription>
+            </DialogContent>
+          </Dialog>
         </form>
+
+
       </section>
     </section>
   )
