@@ -40,7 +40,7 @@ export default async function ProtectedNavbar() {
       itemName: "Feeds"
     },
     {
-      href: `/${username}/drafts`,
+      href: `/${username}/drafts/1`,
       itemName: "Drafts"
     },
     {

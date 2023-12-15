@@ -24,7 +24,6 @@ export default async function Feeds() {
   const poemFeeds = await fetchPoemFeeds();
   const quoteFeeds = await fetchQuoteFeeds();
 
-  const allFeeds = [];
   const feeds = [...poemFeeds, ...quoteFeeds, ...storyFeeds];
   const mixedFeeds = shuffleArray(feeds);
   return (
