@@ -120,13 +120,13 @@ export interface Database {
         Row: {
           banner_url: string | null
           comment_count: number | null
+          content: string | null
           created_at: string | null
           entity_id: string
           entity_type: string
           genre: string | null
           is_published: boolean | null
           like_count: number | null
-          poem: Json | null
           read_count: number | null
           title: string | null
           updated_at: string | null
@@ -135,13 +135,13 @@ export interface Database {
         Insert: {
           banner_url?: string | null
           comment_count?: number | null
+          content?: string | null
           created_at?: string | null
           entity_id?: string
           entity_type?: string
           genre?: string | null
           is_published?: boolean | null
           like_count?: number | null
-          poem?: Json | null
           read_count?: number | null
           title?: string | null
           updated_at?: string | null
@@ -150,13 +150,13 @@ export interface Database {
         Update: {
           banner_url?: string | null
           comment_count?: number | null
+          content?: string | null
           created_at?: string | null
           entity_id?: string
           entity_type?: string
           genre?: string | null
           is_published?: boolean | null
           like_count?: number | null
-          poem?: Json | null
           read_count?: number | null
           title?: string | null
           updated_at?: string | null
@@ -372,13 +372,13 @@ export interface Database {
         Row: {
           banner_url: string | null
           comment_count: number | null
+          content: string | null
           created_at: string | null
           entity_id: string
           entity_type: string
           genre: string | null
           is_published: boolean | null
           like_count: number | null
-          quote: Json | null
           read_count: number | null
           title: string | null
           updated_at: string | null
@@ -388,13 +388,13 @@ export interface Database {
         Insert: {
           banner_url?: string | null
           comment_count?: number | null
+          content?: string | null
           created_at?: string | null
           entity_id?: string
           entity_type?: string
           genre?: string | null
           is_published?: boolean | null
           like_count?: number | null
-          quote?: Json | null
           read_count?: number | null
           title?: string | null
           updated_at?: string | null
@@ -404,13 +404,13 @@ export interface Database {
         Update: {
           banner_url?: string | null
           comment_count?: number | null
+          content?: string | null
           created_at?: string | null
           entity_id?: string
           entity_type?: string
           genre?: string | null
           is_published?: boolean | null
           like_count?: number | null
-          quote?: Json | null
           read_count?: number | null
           title?: string | null
           updated_at?: string | null
@@ -431,6 +431,7 @@ export interface Database {
         Row: {
           banner_url: string | null
           comment_count: number | null
+          content: string | null
           created_at: string | null
           entity_id: string
           entity_type: string
@@ -438,7 +439,6 @@ export interface Database {
           is_published: boolean | null
           like_count: number | null
           read_count: number | null
-          story: Json | null
           title: string | null
           updated_at: string | null
           user_id: string
@@ -446,6 +446,7 @@ export interface Database {
         Insert: {
           banner_url?: string | null
           comment_count?: number | null
+          content?: string | null
           created_at?: string | null
           entity_id?: string
           entity_type?: string
@@ -453,7 +454,6 @@ export interface Database {
           is_published?: boolean | null
           like_count?: number | null
           read_count?: number | null
-          story?: Json | null
           title?: string | null
           updated_at?: string | null
           user_id: string
@@ -461,6 +461,7 @@ export interface Database {
         Update: {
           banner_url?: string | null
           comment_count?: number | null
+          content?: string | null
           created_at?: string | null
           entity_id?: string
           entity_type?: string
@@ -468,7 +469,6 @@ export interface Database {
           is_published?: boolean | null
           like_count?: number | null
           read_count?: number | null
-          story?: Json | null
           title?: string | null
           updated_at?: string | null
           user_id?: string
