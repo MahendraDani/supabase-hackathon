@@ -20,11 +20,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import { Input } from "@/components/ui/input"
 import { createServerActionClient, createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
+import { Label } from "@radix-ui/react-dropdown-menu";
 
 interface DraftsPageInterface {
   params: {
@@ -223,14 +234,67 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
           </div> */}
           <div className="w-full">
             <h1>
-              <Textarea placeholder="Title here..." name="title" defaultValue={currentDraft.title} className="min-h-12 overflow-hidden focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:w-[80%] text-4xl font-bold" />
+              <Textarea placeholder="Title here..." name="title" defaultValue={currentDraft.title} className="min-h-12 overflow-scroll focus-visible:ring-0 focus-visible:ring-offset-0 border-none w-[80%] text-4xl font-bold" />
             </h1>
             <p>
               <Textarea placeholder="Once upon a time..." name="content" defaultValue={!currentDraft.content ? "Write your story here" : currentDraft.content} className="min-h-[400rem] focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:w-[80%] text-lg" />
             </p>
           </div>
 
-          <Button variant="outline" className="hidden md:block fixed right-20 w-[12rem]">Save</Button>
+          <Button variant="outline" className="md:block fixed bottom-5 right-5 md:right-20 w-[12rem]">Save</Button>
+          {/* For mobile screens only */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button className="block fixed right-3 md:hidden">Hello</Button>
+            </SheetTrigger>
+            <SheetContent className="flex flex-col justify-between">
+              <div>
+                <SheetHeader>
+                  <SheetTitle>Your Drafts</SheetTitle>
+                  <SheetDescription className="mt-2 mb-4">
+                    <div className="w-full flex flex-col justify-start items-center gap-3">
+                      {sidebarOptions.map((item) => {
+                        const slicedItemName = trimString(item.title, 15);
+                        return (
+                          <div key={1}>
+                            <Link href={item.href}>
+                              <Button variant="outline" className="py-[0.5px] min-w-[16rem] rounded-md">{slicedItemName}</Button>
+                            </Link>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </SheetDescription>
+                </SheetHeader>
+              </div>
+              <div>
+                <SheetFooter>
+                  <div className="flex flex-col justify-between items-center gap-4">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button className="rounded-md md:hidden w-[16rem]">Publish</Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[425px] py-4">
+                        <DialogHeader className="mb-4 ">
+                          <DialogTitle>Do you really want to post?</DialogTitle>
+                        </DialogHeader>
+                        <DialogDescription className="mb-4 flex flex-col justify-start items-start gap-3">
+                          <p>Once published this post will be visible to all.</p>
+                          <div className="w-full flex items-end justify-end gap-3">
+                            <DialogClose><Button variant="outline">Cancel</Button></DialogClose>
+                            <form action={handleFinalPost}>
+                              <DialogClose><Button type="submit">Publish</Button></DialogClose>
+                            </form>
+                          </div>
+                        </DialogDescription>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </SheetFooter>
+              </div>
+            </SheetContent>
+          </Sheet>
+
           <Dialog>
             <DialogTrigger asChild>
               <Button className="rounded-md hidden md:block md:fixed top-40 right-20 w-[12rem]" variant="secondary">Publish</Button>
