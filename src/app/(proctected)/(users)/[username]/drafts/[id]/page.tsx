@@ -86,17 +86,17 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
     }
   }
 
-  const storiesResponse = await supabase.from("stories").select(`entity_type,entity_id,title`).eq("is_published", false);
+  const storiesResponse = await supabase.from("stories").select(`entity_type,entity_id,title`).eq("is_published", false).eq("user_id", user.id);
   if (storiesResponse.error) {
     console.log("Error from stories fetchin");
     return;
   }
-  const poemsRepsonse = await supabase.from("poems").select(`entity_type,entity_id,title`).eq("is_published", false);
+  const poemsRepsonse = await supabase.from("poems").select(`entity_type,entity_id,title`).eq("is_published", false).eq("user_id", user.id);
   if (poemsRepsonse.error) {
     console.log("Error in fetching poems");
     return;
   }
-  const quotesRespnse = await supabase.from("quotes").select(`entity_type,entity_id,title`).eq("is_published", false);
+  const quotesRespnse = await supabase.from("quotes").select(`entity_type,entity_id,title`).eq("is_published", false).eq("user_id", user.id);
   if (poemsRepsonse.error) {
     console.log("error in fetching quotes");
   }
@@ -118,6 +118,18 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
     })
   })
 
+  const submitPost = async (formData: FormData) => {
+    "use server";
+    const supabase = createServerActionClient({ cookies });
+    if (currentDraft.entity_type === "story") {
+      const storiesPostResponse = await supabase.from("stories").update({ "title": formData.get("title").toString(), "content": formData.get("content").toString() }).eq("entity_id", currentDraft.entity_id).select();
+      if (storiesPostResponse.error) {
+        console.log(storiesPostResponse.error)
+      }
+      console.log(storiesPostResponse.data)
+    }
+    // console.log(formData);
+  }
 
   return (
     <section className="md:mt-4 relative w-full md:flex md:justify-start md:items-start md:gap-4">
@@ -165,20 +177,21 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
           })}
         </div>
       </aside>
-      <section className="md:w-4/5 md:fixed md:left-72 md:px-8" >
-        <form className="flex flex-col justify-start items-start gap-5">
+      <section className="md:w-4/5 md:sticky md:left-72 md:px-8" >
+        <form action={submitPost} className="flex flex-col justify-start items-start gap-5">
           {/* <div>
             Add Image
           </div> */}
           <div className="w-full">
             <h1>
-              {/* <Input placeholder="Title" className="border-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0" /> */}
-              <Textarea placeholder="Title here..." defaultValue={currentDraft.title} className="min-h-12 overflow-hidden focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:w-[80%] text-4xl font-bold" />
+              <Textarea placeholder="Title here..." name="title" defaultValue={currentDraft.title} className="min-h-12 overflow-hidden focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:w-[80%] text-4xl font-bold" />
             </h1>
             <p>
-              <Textarea placeholder="Once upon a time..." className="min-h-[40rem] focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:w-[80%] text-lg" />
+              <Textarea placeholder="Once upon a time..." name="content" defaultValue={"Once upon a time in ..."} className="min-h-[400rem] focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:w-[80%] text-lg" />
             </p>
           </div>
+
+          <Button variant="outline" className="fixed right-20">Publish</Button>
         </form>
       </section>
     </section>
