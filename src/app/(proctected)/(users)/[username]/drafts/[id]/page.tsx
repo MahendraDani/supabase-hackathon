@@ -36,6 +36,7 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { Label } from "@radix-ui/react-dropdown-menu";
+import Image from "next/image";
 
 interface DraftsPageInterface {
   params: {
@@ -140,13 +141,14 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
         return;
       }
     }
-    else if (currentDraft.entity_type === "poem") {
+    if (currentDraft.entity_type === 'poem') {
       const poemsPostResponse = await supabase.from("poems").update({ "title": formData.get("title").toString(), "content": formData.get("content").toString() }).eq("entity_id", currentDraft.entity_id).select();
       if (poemsPostResponse.error) {
         console.log(poemsPostResponse.error)
         return;
       }
-    } else if (currentDraft.entity_type === "quote") {
+    }
+    if (currentDraft.entity_type === "quote") {
       const quotePostResponse = await supabase.from("quotes").update({ "title": formData.get("title").toString(), "content": formData.get("content").toString() }).eq("entity_id", currentDraft.entity_id).select();
       if (quotePostResponse.error) {
         console.log(quotePostResponse.error)
@@ -186,34 +188,7 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
       {/* Sidebar */}
       <aside className="hidden md:flex flex-col justify-start items-start gap-4 md:w-1/5 fixed left-4 bottom-4 top-[5.5rem] border-[1px] border-slate-300 p-4">
         <h2 className="w-full grid place-content-center">My Drafts</h2>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="w-full rounded-md" variant="secondary">New Draft</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px] py-4">
-            <DialogHeader className="mb-4">
-              <DialogTitle>What do want to write today?</DialogTitle>
-            </DialogHeader>
-            <DialogDescription className="mb-4 ">
-              <form action={handleCreateNewDraft} className="flex justify-start items-start gap-4" >
-                <Select name="entity_type">
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="New Draft" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="story">Story</SelectItem>
-                      <SelectItem value="poem">Poem</SelectItem>
-                      <SelectItem value="quote">Quote</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <Button type="submit">Write</Button>
-              </form>
-            </DialogDescription>
-          </DialogContent>
-        </Dialog>
-
+        <CreateNewDraftComponent handleCreateNewDraft={handleCreateNewDraft} />
         <div className="w-full flex flex-col justify-start items-center gap-2">
           {sidebarOptions.map((item) => {
             const slicedItemName = trimString(item.title, 15);
@@ -237,87 +212,132 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
               <Textarea placeholder="Title here..." name="title" defaultValue={currentDraft.title} className="min-h-12 overflow-scroll focus-visible:ring-0 focus-visible:ring-offset-0 border-none w-[80%] text-4xl font-bold" />
             </h1>
             <p>
-              <Textarea placeholder="Once upon a time..." name="content" defaultValue={!currentDraft.content ? "Write your story here" : currentDraft.content} className="min-h-[400rem] focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:w-[80%] text-lg" />
+              <Textarea placeholder="Write " name="content" defaultValue={!currentDraft.content ? "Write here..." : currentDraft.content} className="min-h-[400rem] focus-visible:ring-0 focus-visible:ring-offset-0 border-none md:w-[80%] text-lg" />
             </p>
           </div>
 
-          <Button variant="outline" className="md:block fixed bottom-5 right-5 md:right-20 w-[12rem]">Save</Button>
+          <Button variant="outline" type="submit" className="md:block fixed bottom-5 right-5 md:right-20 w-[12rem]">Save</Button>
           {/* For mobile screens only */}
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button className="block fixed right-3 md:hidden">Hello</Button>
-            </SheetTrigger>
-            <SheetContent className="flex flex-col justify-between">
-              <div>
-                <SheetHeader>
-                  <SheetTitle>Your Drafts</SheetTitle>
-                  <SheetDescription className="mt-2 mb-4">
-                    <div className="w-full flex flex-col justify-start items-center gap-3">
-                      {sidebarOptions.map((item) => {
-                        const slicedItemName = trimString(item.title, 15);
-                        return (
-                          <div key={1}>
-                            <Link href={item.href}>
-                              <Button variant="outline" className="py-[0.5px] min-w-[16rem] rounded-md">{slicedItemName}</Button>
-                            </Link>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </SheetDescription>
-                </SheetHeader>
-              </div>
-              <div>
-                <SheetFooter>
-                  <div className="flex flex-col justify-between items-center gap-4">
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button className="rounded-md md:hidden w-[16rem]">Publish</Button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-[425px] py-4">
-                        <DialogHeader className="mb-4 ">
-                          <DialogTitle>Do you really want to post?</DialogTitle>
-                        </DialogHeader>
-                        <DialogDescription className="mb-4 flex flex-col justify-start items-start gap-3">
-                          <p>Once published this post will be visible to all.</p>
-                          <div className="w-full flex items-end justify-end gap-3">
-                            <DialogClose><Button variant="outline">Cancel</Button></DialogClose>
-                            <form action={handleFinalPost}>
-                              <DialogClose><Button type="submit">Publish</Button></DialogClose>
-                            </form>
-                          </div>
-                        </DialogDescription>
-                      </DialogContent>
-                    </Dialog>
-                  </div>
-                </SheetFooter>
-              </div>
-            </SheetContent>
-          </Sheet>
-
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="rounded-md hidden md:block md:fixed top-40 right-20 w-[12rem]" variant="secondary">Publish</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] py-4">
-              <DialogHeader className="mb-4 ">
-                <DialogTitle>Do you really want to post?</DialogTitle>
-              </DialogHeader>
-              <DialogDescription className="mb-4 flex flex-col justify-start items-start gap-3">
-                <p>Once published this post will be visible to all.</p>
-                <div className="w-full flex items-end justify-end gap-3">
-                  <DialogClose><Button variant="outline">Cancel</Button></DialogClose>
-                  <form action={handleFinalPost}>
-                    <DialogClose><Button type="submit">Publish</Button></DialogClose>
-                  </form>
-                </div>
-              </DialogDescription>
-            </DialogContent>
-          </Dialog>
+          <DraftOptionsSidebarMobile trimString={trimString} handleFinalPost={handleFinalPost} sidebarOptions={sidebarOptions} handleCreateNewDraft={handleCreateNewDraft} />
+          <PublishPostDesktop handleFinalPost={handleFinalPost} />
         </form>
-
-
       </section>
     </section>
+  )
+}
+
+const PublishPostDesktop = ({ handleFinalPost }) => {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className="rounded-md hidden md:block md:fixed top-40 right-20 w-[12rem]" variant="secondary">Publish</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px] py-4">
+        <DialogHeader className="mb-4 ">
+          <DialogTitle>Do you really want to post?</DialogTitle>
+        </DialogHeader>
+        <DialogDescription className="mb-4 flex flex-col justify-start items-start gap-3">
+          <p>Once published this post will be visible to all.</p>
+          <div className="w-full flex items-end justify-end gap-3">
+            <DialogClose><Button variant="outline">Cancel</Button></DialogClose>
+            <form action={handleFinalPost}>
+              <DialogClose><Button type="submit">Publish</Button></DialogClose>
+            </form>
+          </div>
+        </DialogDescription>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+const DraftOptionsSidebarMobile = ({ sidebarOptions, handleFinalPost, trimString, handleCreateNewDraft }) => {
+  return (<Sheet>
+    <SheetTrigger asChild>
+      <button className="block fixed top-35 right-5 md:hidden hover:bg-slate-100 p-2 rounded-full">
+        <Image src={"/icons/vertical-dots.png"} width={24} height={24} alt="Sidebar menu" />
+      </button>
+    </SheetTrigger>
+    <SheetContent className="flex flex-col justify-between">
+      <div>
+        <SheetHeader>
+          <SheetTitle>Your Drafts</SheetTitle>
+          <SheetDescription className="mt-2 mb-4">
+            <div className="mb-3">
+              <CreateNewDraftComponent handleCreateNewDraft={handleCreateNewDraft} />
+            </div>
+            <div className="w-full flex flex-col justify-start items-center gap-3">
+              {sidebarOptions.map((item) => {
+                const slicedItemName = trimString(item.title, 15);
+                return (
+                  <div key={1}>
+                    <Link href={item.href}>
+                      <Button variant="outline" className="py-[0.5px] min-w-[16rem] rounded-md">{slicedItemName}</Button>
+                    </Link>
+                  </div>
+                )
+              })}
+            </div>
+          </SheetDescription>
+        </SheetHeader>
+      </div>
+      <div>
+        <SheetFooter>
+          <div className="flex flex-col justify-between items-center gap-4">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="rounded-md md:hidden w-[16rem]">Publish</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px] py-4">
+                <DialogHeader className="mb-4 ">
+                  <DialogTitle>Do you really want to post?</DialogTitle>
+                </DialogHeader>
+                <DialogDescription className="mb-4 flex flex-col justify-start items-start gap-3">
+                  <p>Once published this post will be visible to all.</p>
+                  <div className="w-full flex items-end justify-end gap-3">
+                    <DialogClose><Button variant="outline">Cancel</Button></DialogClose>
+                    <form action={handleFinalPost}>
+                      <DialogClose><Button type="submit">Publish</Button></DialogClose>
+                    </form>
+                  </div>
+                </DialogDescription>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </SheetFooter>
+      </div>
+    </SheetContent>
+  </Sheet>
+  )
+}
+
+const CreateNewDraftComponent = ({ handleCreateNewDraft }) => {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className="w-full rounded-md" variant="secondary">New Draft</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px] py-4">
+        <DialogHeader className="mb-4">
+          <DialogTitle>What do want to write today?</DialogTitle>
+        </DialogHeader>
+        <DialogDescription className="mb-4 ">
+          <form action={handleCreateNewDraft} className="flex justify-start items-start gap-4" >
+            <Select name="entity_type">
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="New Draft" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="story">Story</SelectItem>
+                  <SelectItem value="poem">Poem</SelectItem>
+                  <SelectItem value="quote">Quote</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <Button type="submit">Write</Button>
+          </form>
+        </DialogDescription>
+      </DialogContent>
+    </Dialog>
   )
 }
