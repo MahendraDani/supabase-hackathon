@@ -116,13 +116,19 @@ const FeedPage = async ({ params }: FeedPageInterface) => {
   let isLiked = false;
   if (entity_type === "story") {
     const response = await supabase.from("story_likes").select("*").eq("user_id", user.id).eq("entity_id", entity_id);
-    isLiked = true;
+    if (response.data.length !== 0) {
+      isLiked = true;
+    }
   } else if (entity_type === "poem") {
     const response = await supabase.from("quote_likes").select("*").eq("user_id", user.id).eq("entity_id", entity_id);
-    isLiked = true;
+    if (response.data.length !== 0) {
+      isLiked = true;
+    }
   } else if (entity_type === "quote") {
     const response = await supabase.from("poem_likes").select("*").eq("user_id", user.id).eq("entity_id", entity_id);
-    isLiked = true;
+    if (response.data.length !== 0) {
+      isLiked = true;
+    }
   }
   return (
     <div className="relative mt-4 w-full flex flex-col justify-center items-center">

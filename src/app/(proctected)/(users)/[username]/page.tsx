@@ -11,79 +11,77 @@ interface ProfilePageProps {
     username: string;
   }
 }
-/* 
-------------------------------------------------------------------------------------------
-TODO
-------------------------------------------------------------------------------------------
-ref : This page will be similar to hashnode.com/settings
-All the features will be present there
-------------------------------------------------------------------------------------------
-*/
+
 export default async function ProfilePage({ params }: ProfilePageProps) {
-  const ProfileSidebarOptions = [
+  const ProfileSidebarOptions = [];
+  let socials = [];
+
+  const supabase = createServerComponentClient<Database>({ cookies });
+  const { data, error } = await supabase.from("profiles").select("*").eq("username", params.username);
+  socials.push({
+    src: "/icons/linkedin.svg",
+    href: data[0].linkedin_url,
+    alt: "Linkedin"
+  });
+  socials.push({
+    src: "/icons/github.svg",
+    href: data[0].github_url,
+    alt: "Github"
+  })
+  socials.push({
+    src: "/icons/medium.svg",
+    href: data[0].medium_url,
+    alt: "Medium"
+  })
+  socials.push({
+    src: "/icons/twitterx.svg",
+    href: data[0].twitter_url,
+    alt: "Twitter"
+  })
+  socials.push({
+    src: "/icons/hashnode.svg",
+    href: data[0].hashnode_url,
+    alt: "Hashnode"
+  })
+
+  ProfileSidebarOptions.push(
     {
       src: "/icons/person.png",
       alt: "User name",
-      name: "mahi09"
+      name: data[0].username
     },
+  );
+  ProfileSidebarOptions.push(
     {
-      src: "/icons/email.png",
-      alt: "Email",
-      name: "danimahendra0904@gmail.com"
-    },
-    {
-      src: "/icons/person.png",
+      src: "/icons/tagline-2.png",
       alt: "Tag line",
-      name: "Tagline here"
+      name: data[0].tagline,
     },
+  )
+  ProfileSidebarOptions.push(
     {
       src: "/icons/location.png",
       alt: "City",
-      name: "City here"
+      name: data[0].city
     },
+  );
+  ProfileSidebarOptions.push(
     {
       src: "/icons/country.png",
       alt: "Country",
-      name: "Country here"
+      name: data[0].country
     },
-    {
-      src: "/icons/date.png",
-      alt: "Date",
-      name: "Date "
-    }
-  ]
-  const socials = [
-    {
-      src: "/icons/linkedin.svg",
-      href: "https://linkedin.com/in/mahendra-dani",
-      alt: "Linkedin"
-    },
-    {
-      src: "/icons/github.svg",
-      href: "https://github.com/MahendraDani",
-      alt: "Github"
-    }, {
-      src: "/icons/medium.svg",
-      href: "https://medium.com/MahendraDani",
-      alt: "Medium"
-    }, {
-      src: "/icons/twitterx.svg",
-      href: "https://twitter.com/@MahendraDani09",
-      alt: "Twitter"
-    }, {
-      src: "/icons/hashnode.svg",
-      href: "https://hashnode.com/Mahendra09",
-      alt: "Hashnode"
-    }
-  ]
+  )
+
+
   return (
     <div>
       <div className="mt-6 w-full flex justify-center items-center">
         <section className="w-full p-4 md:px-8 md:w-[80%] min-h-[35rem] flex flex-col md:flex-row justify-start items-center md:justify-start md:items-start gap-2 md:gap-16 bg-red-50">
-          <aside>
-            <div className="pt-4 pb-2 w-[85%] md:w-fit flex justify-center md:justify-center items-center md:flex-col gap-4">
-              <Image src="https://github.com/shadcn.png" className="md:hidden rounded-full border-4 border-slate-600" width={64} height={64} alt="Profile image" />
-              <Image src="https://github.com/shadcn.png" className="hidden md:block rounded-full border-4 border-slate-600" width={168} height={168} alt="Profile image" />
+          <aside className="md:w-[45rem]">
+            <div className="pt-4 pb-2 flex justify-center md:justify-center items-center md:flex-col gap-4">
+              <Image src={data[0].avatar_url} className="md:hidden rounded-full border-4 border-slate-600" width={64} height={64} alt="Profile image" />
+              <Image src={data[0].avatar_url} className="hidden md:block rounded-full border-4 border-slate-600" width={168} height={168} alt="Profile image" />
               <div>
                 <p className="text-xl md:text-lg">Mahendra Dani</p>
                 <p className="text-sm md:hidden">Tagline</p>
@@ -125,7 +123,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           <aside className="hidden md:flex flex-col justify-start items-start gap-4 pt-4">
             <div className="flex justify-start items-start gap-3 flex-col pb-3">
               <h3 className="text-xl font-semibold">About</h3>
-              <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum ratione ipsa, aliquam autem totam tempore praesentium, impedit corporis officiis amet voluptas suscipit nulla. Deserunt aspernatur rerum perferendis beatae, praesentium amet!</p>
+              <p>{data[0].about}</p>
             </div>
             <div className="flex justify-start items-start gap-3 flex-col">
               <h3 className="text-xl font-semibold pb-3">Socials</h3>
@@ -159,7 +157,7 @@ interface ProfileSectionItemInterface {
 
 const ProfileSectionItem = ({ src, alt, name }: ProfileSectionItemInterface) => {
   return (
-    <div className="flex justify-start items-center gap-2 max-w-[20rem]">
+    <div className="flex justify-start items-start gap-2 max-w-[20rem]">
       <Image src={src} width={24} height={24} alt={alt} />
       <p>{name}</p>
     </div>
