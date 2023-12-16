@@ -44,7 +44,7 @@ export default async function Feeds() {
                       <p>{f.entity_type}</p>
                     </div>
                     <div>
-                      <Link href={`/feeds/${f.entity_id}`}>
+                      <Link href={`/feeds/${f.entity_type}E${f.entity_id}`}>
                         Read
                       </Link>
                     </div>

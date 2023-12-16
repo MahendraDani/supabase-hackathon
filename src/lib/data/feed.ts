@@ -4,14 +4,17 @@ import { cookies } from "next/headers";
 
 export const fetchStoryFeeds = async () => {
   const supabase = createServerComponentClient<Database>({ cookies });
-  const { data, error } = await supabase.from("stories").select(
-    `*,
+  const { data, error } = await supabase
+    .from("stories")
+    .select(
+      `*,
     profiles(
       username,
       full_name
     )
     `
-  );
+    )
+    .eq("is_published", true);
   if (error) {
     // console.log(error);
     console.log("Error from story fetch");
@@ -21,15 +24,18 @@ export const fetchStoryFeeds = async () => {
 
 export const fetchPoemFeeds = async () => {
   const supabase = createServerComponentClient<Database>({ cookies });
-  const { data, error } = await supabase.from("poems").select(
-    `
+  const { data, error } = await supabase
+    .from("poems")
+    .select(
+      `
     *,
     profiles(
       username,
       full_name
     )
     `
-  );
+    )
+    .eq("is_published", true);
   if (error) {
     // console.log(error);
     console.log("Error from poem fetch");
@@ -40,14 +46,17 @@ export const fetchPoemFeeds = async () => {
 export const fetchQuoteFeeds = async () => {
   const supabase = createServerComponentClient<Database>({ cookies });
 
-  const { data, error } = await supabase.from("quotes").select(
-    `*,
+  const { data, error } = await supabase
+    .from("quotes")
+    .select(
+      `*,
     profiles(
       username,
       full_name
     )
     `
-  );
+    )
+    .eq("is_published", true);
   if (error) {
     // console.log(error);
     console.log("Error from quote fetch");
