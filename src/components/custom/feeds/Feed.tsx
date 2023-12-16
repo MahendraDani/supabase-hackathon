@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link";
 import Image from "next/image";
 import { formatDate } from "@/lib/utils/formatDate";
+import { resolve } from "path";
 
 
 const shuffleArray = (array: any) => {
