@@ -130,6 +130,27 @@ const CommentsComponent = async ({ entity_id, entity_type }) => {
       }
     }
   }
+
+  // Fetch existing comments
+  let ExisingComments = [];
+  if (entity_type === "story") {
+    const response = await supabase.from("story_comments").select(`*, profiles(
+      username,full_name,avatar_url
+    )`).eq("entity_id", entity_id);
+    ExisingComments = response.data;
+  } else if (entity_type === "poem") {
+    const response = await supabase.from("poem_comments").select(`*, profiles(
+      username,full_name,avatar_url
+    )`).eq("entity_id", entity_id);
+    ExisingComments = response.data;
+  }
+  else if (entity_type === "quote") {
+    const response = await supabase.from("quote_comments").select(`*, profiles(
+      username,full_name,avatar_url
+    )`).eq("entity_id", entity_id);
+    ExisingComments = response.data;
+  }
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -160,8 +181,40 @@ const CommentsComponent = async ({ entity_id, entity_type }) => {
               </div>
             </form>
           </div>
+          <div>
+            {ExisingComments.length != 0 ? ExisingComments.map((item) => {
+              return (
+                <div key={item.entity_id}>
+                  <EachCommentComponent comment={item.comment} avatar_url={item.profiles.avatar_url} username={item.profiles.username} full_name={item.profiles.full_name} createdAt={item.created_at} />
+                </div>
+              )
+            }) : <p>No comments yet!</p>}
+          </div>
         </SheetDescription>
       </SheetContent>
     </Sheet>
+  )
+}
+
+const EachCommentComponent = ({ avatar_url, full_name, username, comment, createdAt }) => {
+  return (
+    <div className="flex flex-col justify-start items-start gap-2">
+      <div className="flex justify-start items-start gap-4">
+        <Avatar>
+          <AvatarImage src={avatar_url} alt={full_name} />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+        <div className="flex flex-col justify-start items-start ">
+          <p>{full_name}</p>
+          <p>{username}</p>
+        </div>
+      </div>
+      <div>
+        <p>{createdAt}</p>
+      </div>
+      <div>
+        <p>{comment}</p>
+      </div>
+    </div>
   )
 }
