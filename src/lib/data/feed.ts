@@ -10,7 +10,8 @@ export const fetchStoryFeeds = async () => {
       `*,
     profiles(
       username,
-      full_name
+      full_name,
+      avatar_url
     )
     `
     )
@@ -31,7 +32,8 @@ export const fetchPoemFeeds = async () => {
     *,
     profiles(
       username,
-      full_name
+      full_name,
+      avatar_url
     )
     `
     )
@@ -52,7 +54,8 @@ export const fetchQuoteFeeds = async () => {
       `*,
     profiles(
       username,
-      full_name
+      full_name,
+      avatar_url
     )
     `
     )

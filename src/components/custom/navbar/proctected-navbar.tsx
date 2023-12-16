@@ -65,10 +65,6 @@ export default async function ProtectedNavbar() {
       itemName: "Drafts",
     },
     {
-      href: `/${username}/reads`,
-      itemName: "Reads"
-    },
-    {
       href: `/${username}/favourites`,
       itemName: "Favourites"
     },
@@ -81,8 +77,6 @@ export default async function ProtectedNavbar() {
       itemName: "Settings",
     },
   ];
-
-
   return (
     <div className="w-full flex justify-center items-center">
       <nav className="w-full md:w-[85%] bg-green-50 p-4 px-6 flex justify-between items-center">

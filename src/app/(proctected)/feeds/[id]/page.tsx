@@ -16,6 +16,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import { IconButton } from "@/components/custom/buttons/IconButton";
+import { formatDate } from "@/lib/utils/formatDate";
 
 interface FeedPageInterface {
   params: {
@@ -244,9 +245,10 @@ const CommentsComponent = async ({ entity_id, entity_type }) => {
           </div>
           <div>
             {ExisingComments.length != 0 ? ExisingComments.map((item) => {
+              const dateTime = formatDate(item.created_at);
               return (
                 <div key={item.entity_id}>
-                  <EachCommentComponent comment={item.comment} avatar_url={item.profiles.avatar_url} username={item.profiles.username} full_name={item.profiles.full_name} createdAt={item.created_at} />
+                  <EachCommentComponent comment={item.comment} avatar_url={item.profiles.avatar_url} username={item.profiles.username} full_name={item.profiles.full_name} createdAt={dateTime} />
                 </div>
               )
             }) : <p>No comments yet!</p>}
