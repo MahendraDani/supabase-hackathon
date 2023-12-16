@@ -10,6 +10,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link";
 
+
 const shuffleArray = (array: any) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -43,11 +44,9 @@ export default async function Feeds() {
                       <p>{f.profiles?.username}</p>
                       <p>{f.entity_type}</p>
                     </div>
-                    <div>
-                      <Link href={`/feeds/${f.entity_type}E${f.entity_id}`}>
-                        Read
-                      </Link>
-                    </div>
+                    <Link href={`/feeds/${f.entity_type}E${f.entity_id}`}>
+                      Read
+                    </Link>
                   </CardContent>
                   <CardHeader>
                     <CardTitle>{f.title}</CardTitle>
