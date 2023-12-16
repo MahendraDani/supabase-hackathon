@@ -113,6 +113,17 @@ const FeedPage = async ({ params }: FeedPageInterface) => {
     }
   }
 
+  let isLiked = false;
+  if (entity_type === "story") {
+    const response = await supabase.from("story_likes").select("*").eq("user_id", user.id).eq("entity_id", entity_id);
+    isLiked = true;
+  } else if (entity_type === "poem") {
+    const response = await supabase.from("quote_likes").select("*").eq("user_id", user.id).eq("entity_id", entity_id);
+    isLiked = true;
+  } else if (entity_type === "quote") {
+    const response = await supabase.from("poem_likes").select("*").eq("user_id", user.id).eq("entity_id", entity_id);
+    isLiked = true;
+  }
   return (
     <div className="relative mt-4 w-full flex flex-col justify-center items-center">
       <section className="w-full md:w-[80%] bg-green-50 p-4 flex flex-col justify-center items-center">
@@ -121,11 +132,13 @@ const FeedPage = async ({ params }: FeedPageInterface) => {
         </h1>
         <p>{currentFeed.entity_type}</p>
         <div>{currentFeed.content}</div>
-        <div className="fixed bottom-10 flex justify-between items-center gap-3">
-          <CommentsComponent entity_id={entity_id} entity_type={entity_type} />
-          <form action={handleLikePost}>
+        <div className="fixed bottom-10 flex justify-between items-center gap-3 border-2 border-slate-100 px-2 rounded-full">
+          {!isLiked ? <form action={handleLikePost}>
             <IconButton src="/icons/like.png" height={28} width={28} alt="Like button" type="submit" />
-          </form>
+          </form> : <IconButton src="/icons/red-heart.png" height={28} width={28} alt="Heart button" />}
+          <CommentsComponent entity_id={entity_id} entity_type={entity_type} />
+          <IconButton src="/icons/share.png" width={24} height={24} alt="Share icon" />
+
         </div>
       </section>
     </div>
