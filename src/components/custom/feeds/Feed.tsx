@@ -11,7 +11,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link";
 import Image from "next/image";
 import { formatDate } from "@/lib/utils/formatDate";
-import { resolve } from "path";
+import { MdOutlineComment } from "react-icons/md"
+import { GoHeartFill } from "react-icons/go"
+import { FaBookReader, FaLightbulb } from "react-icons/fa"
+import { GiStabbedNote } from "react-icons/gi"
+import { LuTrees } from "react-icons/lu"
 
 
 const shuffleArray = (array: any) => {
@@ -37,7 +41,7 @@ export default async function Feeds() {
           mixedFeeds.map((f) => {
             return (
               <div key={f.entity_id}>
-                <Card className="w-full md:w-[80%] lg:w-[70%] mx-auto bg-green-50">
+                <Card className="w-full md:w-[80%] lg:w-[70%] mx-auto">
                   <CardContent className="p-8 w-full -mb-8 flex justify-between items-center">
                     <div className="flex justify-start items-center gap-4">
                       <Avatar>
@@ -52,9 +56,9 @@ export default async function Feeds() {
                       </div>
                     </div>
                     <div className="flex justify-start items-start gap-2">
-                      {f.entity_type === "story" ? <Image src={"/icons/story.png"} width={28} height={28} alt="story" />
-                        : f.entity_type === "poem" ? <Image src={"/icons/poem.png"} width={28} height={28} alt="Poems" />
-                          : <Image src={"/icons/quote.png"} width={28} height={28} alt="story" />
+                      {f.entity_type === "story" ? <div className="text-lg"><LuTrees /></div>
+                        : f.entity_type === "poem" ? <div className="text-lg"><GiStabbedNote /></div>
+                          : <div className="text-lg"><FaLightbulb /></div>
                       }
                     </div>
 
@@ -65,20 +69,26 @@ export default async function Feeds() {
                         {f.title}
                       </Link>
                     </CardTitle>
-                    <CardDescription>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta debitis voluptas eligendi neque deleniti quasi, enim qui in iusto fuga.</CardDescription>
+                    <CardDescription className="w-full min-h-12 max-h-16 text-ellipsis overflow-hidden">{f.content}</CardDescription>
                   </CardHeader>
                   <CardFooter className="flex justify-between items-center gap-4 text-slate-600">
-                    <div className="flex justify-between items-center gap-2">
-                      <div className="flex justify-start items-center gap-2">
-                        <Image src={"/icons/red-heart.png"} width={20} height={20} alt="Likes" />
+                    <div className="flex justify-between items-center gap-4">
+                      <div className="flex justify-start items-center gap-1">
+                        <div className="text-lg">
+                          <GoHeartFill />
+                        </div>
                         <p>{f.like_count}</p>
                       </div>
-                      <div className="flex justify-start items-center gap-2">
-                        <Image src={"/icons/comment.png"} width={20} height={20} alt="Likes" />
+                      <div className="flex justify-start items-center gap-1">
+                        <div className="text-lg">
+                          <MdOutlineComment />
+                        </div>
                         <p>{f.comment_count}</p>
                       </div>
-                      <div className="flex justify-start items-center gap-2">
-                        <Image src={"/icons/book.png"} width={20} height={20} alt="Reads" />
+                      <div className="flex justify-start items-center gap-1">
+                        <div className="text-lg">
+                          <FaBookReader />
+                        </div>
                         <p>{f.read_count}</p>
                       </div>
                     </div>

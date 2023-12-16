@@ -17,6 +17,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import { IconButton } from "@/components/custom/buttons/IconButton";
 import { formatDate } from "@/lib/utils/formatDate";
+import { MdOutlineComment } from "react-icons/md"
+import { IoMdShare } from "react-icons/io"
+import { GoHeartFill, GoHeart } from "react-icons/go"
+
+
 
 interface FeedPageInterface {
   params: {
@@ -133,18 +138,22 @@ const FeedPage = async ({ params }: FeedPageInterface) => {
   }
   return (
     <div className="relative mt-4 w-full flex flex-col justify-center items-center">
-      <section className="w-full md:w-[80%] bg-green-50 p-4 flex flex-col justify-center items-center">
-        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+      <section className="w-full md:w-[80%] p-4 flex flex-col justify-center items-center">
+        <h1 className="scroll-m-20 sm:text-5xl md:text-7xl dark:text-card-foreground font-openSans font-extrabold tracking-tight lg:text-5xl">
           {currentFeed.title}
         </h1>
         <p>{currentFeed.entity_type}</p>
-        <div>{currentFeed.content}</div>
-        <div className="fixed bottom-10 flex justify-between items-center gap-3 border-2 border-slate-100 px-2 rounded-full">
+        <div className="">{currentFeed.content}</div>
+        <div className="fixed bottom-10 flex justify-between items-center gap-3 border-2 dark:bg-background border-heading px-4 rounded-full">
           {!isLiked ? <form action={handleLikePost}>
-            <IconButton src="/icons/like.png" height={28} width={28} alt="Like button" type="submit" />
-          </form> : <IconButton src="/icons/red-heart.png" height={28} width={28} alt="Heart button" />}
+            <div className="text-2xl cursor-pointer"><GoHeart /></div>
+          </form> : <div className="text-2xl cursor-pointer"><GoHeartFill /></div>}
           <CommentsComponent entity_id={entity_id} entity_type={entity_type} />
-          <IconButton src="/icons/share.png" width={24} height={24} alt="Share icon" />
+          <div className="text-2xl cursor-pointer">
+            <IoMdShare />
+          </div>
+          {/* <IconButton src="/icons/share.png" width={24} height={24} alt="Share icon" /> */}
+
 
         </div>
       </section>
@@ -216,7 +225,10 @@ const CommentsComponent = async ({ entity_id, entity_type }) => {
     <Sheet>
       <SheetTrigger asChild>
         {/* <Button variant="outline">Open</Button> */}
-        <IconButton src="/icons/comment.png" width={28} height={28} alt="Comment Button" />
+        {/* <IconButton src="/icons/comment.png" width={28} height={28} alt="Comment Button" /> */}
+        <div className="text-lg">
+          <MdOutlineComment />
+        </div>
       </SheetTrigger>
       <SheetContent className="flex flex-col justify-start items-start gap-4">
         <SheetHeader>

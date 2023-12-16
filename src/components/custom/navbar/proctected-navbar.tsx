@@ -78,8 +78,8 @@ export default async function ProtectedNavbar() {
     },
   ];
   return (
-    <div className="w-full flex justify-center items-center">
-      <nav className="w-full md:w-[85%] bg-green-50 p-4 px-6 flex justify-between items-center">
+    <div className="sticky z-10 top-0 left-0 right-0 w-full flex justify-center items-center">
+      <nav className="w-full md:w-[85%] p-4 px-6 flex justify-between items-center">
         <div>Rhymes and Fables</div>
         <div className="flex justify-start gap-4 items-center">
           <ModeToggle />
