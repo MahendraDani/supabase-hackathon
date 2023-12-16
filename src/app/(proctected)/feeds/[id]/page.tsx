@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/sheet"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
+import { IconButton } from "@/components/custom/buttons/IconButton";
 
 interface FeedPageInterface {
   params: {
@@ -77,16 +78,54 @@ const FeedPage = async ({ params }: FeedPageInterface) => {
 
   }
 
+  // LIKE ---
+  /**
+   * 1. Repeat the process for each entity
+   * 2. Get the user first.
+   * 3. Check if the user has already like the post by selcting in <like_entity> table. If yes -> show the like button red
+   * 4. If no, then insert the user id and entity_id in particular table and update no. of likes in entity_table by prev + 1
+   */
+  const handleLikePost = async () => {
+    "use server";
+
+    const supabase = createServerActionClient({ cookies });
+    if (entity_type === "story") {
+      const response = await supabase.from("story_likes").select("*").eq("user_id", user.id).eq("entity_id", entity_id);
+      if (response.data.length === 0) {
+        await supabase.from("story_likes").insert([{ "user_id": user.id, "entity_id": entity_id }]);
+        const prevLikeCount = await supabase.from("stories").select("like_count").eq("entity_id", entity_id);
+        await supabase.from("stories").update({ "like_count": prevLikeCount.data[0].like_count + 1 }).eq("entity_id", entity_id);
+      }
+    } else if (entity_type === "quote") {
+      const response = await supabase.from("quote_likes").select("*").eq("user_id", user.id).eq("entity_id", entity_id);
+      if (response.data.length === 0) {
+        await supabase.from("quote_likes").insert([{ "user_id": user.id, "entity_id": entity_id }]);
+        const prevLikeCount = await supabase.from("quotes").select("like_count").eq("entity_id", entity_id);
+        await supabase.from("quotes").update({ "like_count": prevLikeCount.data[0].like_count + 1 }).eq("entity_id", entity_id);
+      }
+    } else if (entity_type === "poem") {
+      const response = await supabase.from("poem_likes").select("*").eq("user_id", user.id).eq("entity_id", entity_id);
+      if (response.data.length === 0) {
+        await supabase.from("poem_likes").insert([{ "user_id": user.id, "entity_id": entity_id }]);
+        const prevLikeCount = await supabase.from("poems").select("like_count").eq("entity_id", entity_id);
+        await supabase.from("poems").update({ "like_count": prevLikeCount.data[0].like_count + 1 }).eq("entity_id", entity_id);
+      }
+    }
+  }
+
   return (
-    <div className="mt-4 w-full flex flex-col justify-center items-center">
+    <div className="relative mt-4 w-full flex flex-col justify-center items-center">
       <section className="w-full md:w-[80%] bg-green-50 p-4 flex flex-col justify-center items-center">
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
           {currentFeed.title}
         </h1>
         <p>{currentFeed.entity_type}</p>
         <div>{currentFeed.content}</div>
-        <div>
+        <div className="fixed bottom-10 flex justify-between items-center gap-3">
           <CommentsComponent entity_id={entity_id} entity_type={entity_type} />
+          <form action={handleLikePost}>
+            <IconButton src="/icons/like.png" height={28} width={28} alt="Like button" type="submit" />
+          </form>
         </div>
       </section>
     </div>
@@ -94,6 +133,8 @@ const FeedPage = async ({ params }: FeedPageInterface) => {
 }
 export default FeedPage;
 
+
+// Comments component
 const CommentsComponent = async ({ entity_id, entity_type }) => {
   const supabase = createServerComponentClient<Database>({ cookies });
   const userAuth = await supabase.auth.getUser();
@@ -154,7 +195,8 @@ const CommentsComponent = async ({ entity_id, entity_type }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Open</Button>
+        {/* <Button variant="outline">Open</Button> */}
+        <IconButton src="/icons/comment.png" width={28} height={28} alt="Comment Button" />
       </SheetTrigger>
       <SheetContent className="flex flex-col justify-start items-start gap-4">
         <SheetHeader>
@@ -196,6 +238,8 @@ const CommentsComponent = async ({ entity_id, entity_type }) => {
   )
 }
 
+
+// Each comments layout component
 const EachCommentComponent = ({ avatar_url, full_name, username, comment, createdAt }) => {
   return (
     <div className="flex flex-col justify-start items-start gap-2">
@@ -218,3 +262,8 @@ const EachCommentComponent = ({ avatar_url, full_name, username, comment, create
     </div>
   )
 }
+
+
+
+
+
