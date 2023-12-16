@@ -84,13 +84,6 @@ const FeedPage = async ({ params }: FeedPageInterface) => {
 
   }
 
-  // LIKE ---
-  /**
-   * 1. Repeat the process for each entity
-   * 2. Get the user first.
-   * 3. Check if the user has already like the post by selcting in <like_entity> table. If yes -> show the like button red
-   * 4. If no, then insert the user id and entity_id in particular table and update no. of likes in entity_table by prev + 1
-   */
   const handleLikePost = async () => {
     "use server";
 
@@ -153,8 +146,6 @@ const FeedPage = async ({ params }: FeedPageInterface) => {
             <IoMdShare />
           </div>
           {/* <IconButton src="/icons/share.png" width={24} height={24} alt="Share icon" /> */}
-
-
         </div>
       </section>
     </div>
