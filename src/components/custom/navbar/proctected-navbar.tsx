@@ -3,7 +3,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerActionClient, createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { cookies } from "next/headers"
 import { ModeToggle } from "../theme/theme";
@@ -16,8 +16,20 @@ import {
   SheetHeader,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 
 
 export default async function ProtectedNavbar() {
@@ -68,11 +80,9 @@ export default async function ProtectedNavbar() {
       href: `/${username}/settings`,
       itemName: "Settings",
     },
-    {
-      href: `/${username}/logout`,
-      itemName: "Log out"
-    },
   ];
+
+
   return (
     <div className="w-full flex justify-center items-center">
       <nav className="w-full md:w-[85%] bg-green-50 p-4 px-6 flex justify-between items-center">
@@ -109,7 +119,9 @@ export default async function ProtectedNavbar() {
                       </div>
                     )
                   })}
+                  <LogoutComponent />
                 </div>
+
               </SheetDescription>
             </SheetContent>
           </Sheet>
@@ -123,12 +135,37 @@ interface ProfileDropDownItemProps {
   href: string;
   itemName: string;
 }
-const ProfileDropDownItem = ({ href, itemName }: ProfileDropDownItemProps) => {
+
+const LogoutComponent = () => {
+  const handleLogout = async () => {
+    "use server";
+    const supabase = createServerActionClient({ cookies });
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.log("Error while logging out")
+      return;
+    }
+    redirect("/");
+  }
   return (
-    <Link href={href} >
-      <DropdownMenuItem className="cursor-pointer">
-        {itemName}
-      </DropdownMenuItem>
-    </Link>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="outline" className="w-full">Logout</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            There are many more stories, poems and quotes left to read, explore, learn and have fun.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <form action={handleLogout}>
+            <Button type="submit" >Log out</Button>
+          </form>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }
