@@ -1,5 +1,20 @@
 import { createServerActionClient, createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Textarea } from "@/components/ui/textarea";
 
 interface FeedPageInterface {
   params: {
@@ -70,8 +85,83 @@ const FeedPage = async ({ params }: FeedPageInterface) => {
         </h1>
         <p>{currentFeed.entity_type}</p>
         <div>{currentFeed.content}</div>
+        <div>
+          <CommentsComponent entity_id={entity_id} entity_type={entity_type} />
+        </div>
       </section>
     </div>
   )
 }
 export default FeedPage;
+
+const CommentsComponent = async ({ entity_id, entity_type }) => {
+  const supabase = createServerComponentClient<Database>({ cookies });
+  const userAuth = await supabase.auth.getUser();
+  const profileDetails = await supabase.from("profiles").select(`username,full_name,avatar_url`).eq("user_id", userAuth.data.user.id);
+
+  const handleSubmitComment = async (formData: FormData) => {
+    "use server";
+    if (!formData.get("comment")) {
+      return;
+    }
+    const supbaseActionClient = createServerActionClient({ cookies });
+    if (entity_type === "story") {
+      const hasComentedBefore = await supbaseActionClient.from("story_comments").select("*").eq("user_id", userAuth.data.user.id).eq("entity_id", entity_id);
+      if (hasComentedBefore.data.length === 0) {
+        await supbaseActionClient.from("story_comments").insert([{ "user_id": userAuth.data.user.id, "entity_id": entity_id, "comment": formData.get("comment").toString() }]);
+      } else {
+        await supbaseActionClient.from("story_comments").update({ "comment": formData.get("comment").toString() }).eq("user_id", userAuth.data.user.id).eq("entity_id", entity_id);
+      }
+    }
+    else if (entity_type === "poem") {
+      const hasComentedBefore = await supbaseActionClient.from("poem_comments").select("*").eq("user_id", userAuth.data.user.id).eq("entity_id", entity_id);
+      if (hasComentedBefore.data.length === 0) {
+        await supbaseActionClient.from("poem_comments").insert([{ "user_id": userAuth.data.user.id, "entity_id": entity_id, "comment": formData.get("comment").toString() }]);
+      } else {
+        await supbaseActionClient.from("poem_comments").update({ "comment": formData.get("comment").toString() }).eq("user_id", userAuth.data.user.id).eq("entity_id", entity_id);
+      }
+    }
+    else if (entity_type === "quote") {
+      const hasComentedBefore = await supbaseActionClient.from("quote_comments").select("*").eq("user_id", userAuth.data.user.id).eq("entity_id", entity_id);
+      if (hasComentedBefore.data.length === 0) {
+        await supbaseActionClient.from("quote_comments").insert([{ "user_id": userAuth.data.user.id, "entity_id": entity_id, "comment": formData.get("comment").toString() }]);
+      } else {
+        await supbaseActionClient.from("poem_comments").update({ "comment": formData.get("comment").toString() }).eq("user_id", userAuth.data.user.id).eq("entity_id", entity_id);
+      }
+    }
+  }
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="outline">Open</Button>
+      </SheetTrigger>
+      <SheetContent className="flex flex-col justify-start items-start gap-4">
+        <SheetHeader>
+          <SheetTitle>Comments</SheetTitle>
+        </SheetHeader>
+        <SheetDescription className="w-full flex justify-start items-start gap-3 flex-col">
+          {/* Make changes to your profile here. Click save when you're done. */}
+          <div className="flex justify-start items-start gap-4">
+            <Avatar>
+              <AvatarImage src={profileDetails?.data[0].avatar_url} alt={profileDetails?.data[0].full_name} />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col justify-start items-start ">
+              <p>{profileDetails?.data[0].full_name}</p>
+              <p>{profileDetails?.data[0].username}</p>
+            </div>
+          </div>
+          <div className="w-full border-t-[1px] border-b-[1px] border-slate-300">
+            <form action={handleSubmitComment} className="py-3 w-full flex flex-col justify-start items-start gap-2">
+              <Label className="pl-3">Write your comment below</Label>
+              <Textarea name="comment" placeholder="Your comment here" className="focus-visible:ring-0 focus-visible:ring-offset-0 border-none" />
+              <div className="w-full flex justify-end items-end">
+                <Button variant="outline" className="rounded-full -py-1">Comment</Button>
+              </div>
+            </form>
+          </div>
+        </SheetDescription>
+      </SheetContent>
+    </Sheet>
+  )
+}
