@@ -5,6 +5,11 @@ import { QueryData } from "@supabase/supabase-js";
 import { cookies } from "next/headers"
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Link from "next/link";
+import { IoPerson, IoLocationOutline } from "react-icons/io5"
+import { HiGlobe } from "react-icons/hi"
+import { GoNote } from "react-icons/go";
+import { Card, CardDescription } from "@/components/ui/card";
+import { FaXTwitter } from "react-icons/fa6"
 
 interface ProfilePageProps {
   params: {
@@ -46,28 +51,28 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
   ProfileSidebarOptions.push(
     {
-      src: "/icons/person.png",
+      icon: <IoPerson />,
       alt: "User name",
       name: data[0].username
     },
   );
   ProfileSidebarOptions.push(
     {
-      src: "/icons/tagline-2.png",
+      icon: <GoNote />,
       alt: "Tag line",
       name: data[0].tagline,
     },
   )
   ProfileSidebarOptions.push(
     {
-      src: "/icons/location.png",
+      icon: <IoLocationOutline />,
       alt: "City",
       name: data[0].city
     },
   );
   ProfileSidebarOptions.push(
     {
-      src: "/icons/country.png",
+      icon: <HiGlobe />,
       alt: "Country",
       name: data[0].country
     },
@@ -77,8 +82,8 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   return (
     <div>
       <div className="mt-6 w-full flex justify-center items-center">
-        <section className="w-full p-4 md:px-8 md:w-[80%] min-h-[35rem] flex flex-col md:flex-row justify-start items-center md:justify-start md:items-start gap-2 md:gap-16 bg-red-50">
-          <aside className="md:w-[45rem]">
+        <Card className="w-full p-4 md:px-8 md:w-[80%] min-h-[35rem] flex flex-col md:flex-row justify-start items-center md:justify-start md:items-start gap-2 md:gap-16 ">
+          <aside className="md:w-[30rem]">
             <div className="pt-4 pb-2 flex justify-center md:justify-center items-center md:flex-col gap-4">
               <Image src={data[0].avatar_url} className="md:hidden rounded-full border-4 border-slate-600" width={64} height={64} alt="Profile image" />
               <Image src={data[0].avatar_url} className="hidden md:block rounded-full border-4 border-slate-600" width={168} height={168} alt="Profile image" />
@@ -88,8 +93,8 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               </div>
             </div>
             <div className="py-2 flex flex-col justify-center items-center gap-4 md:hidden">
-              <h3 className="text-center text-lg font-semibold">About</h3>
-              <p className="text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas rem vel ab sit omnis aspernatur numquam iure earum quasi consequuntur!</p>
+              <h3 className="text-center text-2xl font-semibold">About</h3>
+              <p className="text-center">{data[0].about}</p>
             </div>
             <div className="py-2">
               <h3 className="text-center text-lg font-semibold md:hidden pb-2">General</h3>
@@ -97,7 +102,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 {ProfileSidebarOptions.map((item) => {
                   return (
                     <div key={1} >
-                      <ProfileSectionItem src={item.src} alt={item.alt} name={item.name} />
+                      <ProfileSectionItem icon={item.icon} alt={item.alt} name={item.name} />
                     </div>
                   )
                 })}
@@ -122,11 +127,11 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           {/* RIght side */}
           <aside className="hidden md:flex flex-col justify-start items-start gap-4 pt-4">
             <div className="flex justify-start items-start gap-3 flex-col pb-3">
-              <h3 className="text-xl font-semibold">About</h3>
+              <h3 className="text-3xl font-semibold">About</h3>
               <p>{data[0].about}</p>
             </div>
             <div className="flex justify-start items-start gap-3 flex-col">
-              <h3 className="text-xl font-semibold pb-3">Socials</h3>
+              <h3 className="text-3xl font-semibold pb-3">Socials</h3>
               <div className="flex flex-col justify-start items-start gap-3">
                 {socials.map((item) => {
                   return (
@@ -143,22 +148,19 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               </div>
             </div>
           </aside>
-        </section>
+        </Card>
       </div>
     </div >
   )
 }
 
-interface ProfileSectionItemInterface {
-  src: string;
-  alt: string;
-  name: string;
-}
 
-const ProfileSectionItem = ({ src, alt, name }: ProfileSectionItemInterface) => {
+const ProfileSectionItem = ({ icon, alt, name }) => {
   return (
     <div className="flex justify-start items-start gap-2 max-w-[20rem]">
-      <Image src={src} width={24} height={24} alt={alt} />
+      <div className=" text-xl">
+        {icon}
+      </div>
       <p>{name}</p>
     </div>
   )

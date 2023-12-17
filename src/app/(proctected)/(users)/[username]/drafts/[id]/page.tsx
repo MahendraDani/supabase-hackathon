@@ -239,9 +239,12 @@ const PublishPostDesktop = ({ handleFinalPost }) => {
         <DialogDescription className="mb-4 flex flex-col justify-start items-start gap-3">
           <p>Once published this post will be visible to all.</p>
           <div className="w-full flex items-end justify-end gap-3">
-            <DialogClose><Button variant="outline">Cancel</Button></DialogClose>
-            <form action={handleFinalPost}>
-              <DialogClose><Button type="submit">Publish</Button></DialogClose>
+            <form action={handleFinalPost} className="mt-4 flex flex-col justify-start items-center w-full gap-8">
+              <SelectGenreComponentForStory />
+              <div className="w-full flex justify-end items-end gap-4">
+                <DialogClose><Button variant="outline">Cancel</Button></DialogClose>
+                <DialogClose><Button type="submit">Publish</Button></DialogClose>
+              </div>
             </form>
           </div>
         </DialogDescription>
@@ -296,6 +299,7 @@ const DraftOptionsSidebarMobile = ({ sidebarOptions, handleFinalPost, trimString
                   <div className="w-full flex items-end justify-end gap-3">
                     <DialogClose><Button variant="outline">Cancel</Button></DialogClose>
                     <form action={handleFinalPost}>
+                      <SelectGenreComponentForStory />
                       <DialogClose><Button type="submit">Publish</Button></DialogClose>
                     </form>
                   </div>
@@ -339,5 +343,53 @@ const CreateNewDraftComponent = ({ handleCreateNewDraft }) => {
         </DialogDescription>
       </DialogContent>
     </Dialog>
+  )
+}
+
+const SelectGenreComponentForStory = () => {
+  const selectOptions = [
+    {
+      name: "Fantasy",
+      value: "Fantasy",
+    }, {
+      name: "Thriller",
+      value: "Thriller",
+    },
+    {
+      name: "Romance",
+      value: "Romance",
+    },
+    {
+      name: "Horror",
+      value: "Horror",
+    },
+    {
+      name: "Adventure",
+      value: "Classic",
+    },
+    {
+      name: "Science-fiction",
+      value: "Science-fiction",
+    }, {
+      name: "Religious",
+      value: "Religious",
+    }
+  ]
+  return (
+    <Select value="genre">
+      <SelectTrigger className="text-white">
+        <SelectValue placeholder="Select a genre" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Genre</SelectLabel>
+          {selectOptions.map((item) => {
+            return (
+              <SelectItem key={1} value={item.value}>{item.name}</SelectItem>
+            )
+          })}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   )
 }

@@ -145,7 +145,6 @@ const FeedPage = async ({ params }: FeedPageInterface) => {
           <div className="text-2xl cursor-pointer">
             <IoMdShare />
           </div>
-          {/* <IconButton src="/icons/share.png" width={24} height={24} alt="Share icon" /> */}
         </div>
       </section>
     </div>

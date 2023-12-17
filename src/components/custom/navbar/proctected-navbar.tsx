@@ -30,6 +30,9 @@ import {
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 
 export default async function ProtectedNavbar() {
@@ -43,12 +46,44 @@ export default async function ProtectedNavbar() {
   const full_name = data[0]?.full_name;
 
   let redirectDraftHref: string = "";
-  const storiesResponse = await supabase.from("stories").select(`entity_type,entity_id,title`).eq("is_published", false).eq("user_id", user.id);
-  if (storiesResponse.error) {
-    console.log(storiesResponse.error);
-  }
-  if (storiesResponse.data) {
-    redirectDraftHref = storiesResponse.data[0].entity_id;
+  const handleCreateNewDraft = async (formData: FormData) => {
+    "use server";
+    const supabase = createServerActionClient({ cookies });
+    const inputEntityType = formData.get("entity_type").toString();
+    if (inputEntityType === "story") {
+      const { data, error } = await supabase.from("stories").insert([{ "title": "untitled", "user_id": user.id }]).select();
+      if (error) {
+        console.log(error);
+        return;
+      }
+      const entity_id = data[0].entity_id;
+
+      redirect(`/${username}/drafts/${entity_id}`);
+    } else if (inputEntityType === "poem") {
+      const { data, error } = await supabase.from("poems").insert([{ "title": "untitled", "user_id": user.id }]).select();
+      if (error) {
+        console.log(error);
+        return;
+      }
+      const entity_id = data[0].entity_id;
+
+      redirect(`/${username}/drafts/${entity_id}`);
+    } else if (inputEntityType === "quote") {
+      const { data, error } = await supabase.from("quotes").insert([{ "title": "untitled", "user_id": user.id }]).select();
+      if (error) {
+        console.log(error);
+        return;
+      }
+      const entity_id = data[0].entity_id;
+
+      redirect(`/${username}/drafts/${entity_id}`);
+    } else {
+      toast({
+        title: "Please select a valid option!",
+        description: "Incorrect or invalid response"
+      })
+      return;
+    }
   }
 
   const sidebarOptions = [
@@ -59,10 +94,6 @@ export default async function ProtectedNavbar() {
     {
       href: `/feeds`,
       itemName: "Feeds"
-    },
-    {
-      href: `/${username}/drafts/${redirectDraftHref}`,
-      itemName: "Drafts",
     },
     {
       href: `/${username}/favourites`,
@@ -102,6 +133,7 @@ export default async function ProtectedNavbar() {
               </SheetHeader>
               <SheetDescription className="mt-3">
                 <div className="p-2 flex flex-col justify-start items-start gap-2">
+                  <CreateNewDraftComponent handleCreateNewDraft={handleCreateNewDraft} />
                   {sidebarOptions.map((item) => {
                     return (
                       <div key={1}>
@@ -161,5 +193,40 @@ const LogoutComponent = () => {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+  )
+}
+
+const CreateNewDraftComponent = ({ handleCreateNewDraft }) => {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className="w-full rounded-md" variant="secondary">My Draft</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px] py-4">
+        <DialogHeader className="mb-4">
+          <DialogTitle>What do want to write today?</DialogTitle>
+        </DialogHeader>
+        <DialogDescription className="mb-4 ">
+          <form action={handleCreateNewDraft} className="flex justify-start items-start gap-4" >
+            <Select name="entity_type">
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="New Draft" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="story">Story</SelectItem>
+                  <SelectItem value="poem">Poem</SelectItem>
+                  <SelectItem value="quote">Quote</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <DialogClose>
+              <Button type="submit">Write</Button>
+            </DialogClose>
+
+          </form>
+        </DialogDescription>
+      </DialogContent>
+    </Dialog>
   )
 }
