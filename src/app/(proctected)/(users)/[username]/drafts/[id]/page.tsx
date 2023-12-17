@@ -157,6 +157,7 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
   const handleFinalPost = async (formData: FormData) => {
     "use server";
     if (formData.get("genre") === "") {
+      ``
       return;
     }
     const supabase = createServerActionClient({ cookies });

@@ -28,9 +28,6 @@ export default async function SettingsForm() {
     if (error) {
       console.log("err in updating");
     }
-    console.log("SUCCESS _-------------------------------");
-    console.log(data);
-    console.log("Happy?");
   };
 
   return (

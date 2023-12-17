@@ -95,14 +95,6 @@ export default async function ProtectedNavbar() {
       itemName: "Feeds"
     },
     {
-      href: `/${username}/favourites`,
-      itemName: "Favourites"
-    },
-    {
-      href: `/${username}/activity`,
-      itemName: "My Activity"
-    },
-    {
       href: `/${username}/settings`,
       itemName: "Settings",
     },
@@ -199,7 +191,7 @@ const CreateNewDraftComponent = ({ handleCreateNewDraft }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-full rounded-md" variant="secondary">My Draft</Button>
+        <Button className="w-full rounded-md" variant="secondary">Drafts</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] py-4">
         <DialogHeader className="mb-4">

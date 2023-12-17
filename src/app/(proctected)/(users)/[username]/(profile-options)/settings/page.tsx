@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { createClientComponentClient, createServerActionClient, createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import { cookies } from "next/headers"
+import { Card } from "@/components/ui/card";
 
 
 export default async function SettingsPage() {
@@ -39,7 +40,7 @@ export default async function SettingsPage() {
 
   }
   return (
-    <section className="p-2">
+    <Card className="p-4">
       <form action={handleForm} className="flex flex-col md:flex-row md:gap-8 justify-center items-center md:justify-start md:items-start gap-4">
         <section className="w-full md:w-1/2">
           <h2 className="text-center md:text-left mt-10 scroll-m-20 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
@@ -47,7 +48,7 @@ export default async function SettingsPage() {
           </h2>
           <div className="relative flex justify-center items-center md:items-start md:justify-start">
             <Image src={"https://github.com/MahendraDani.png"} width={164} height={164} className="md:relative rounded-full border-4 border-slate-400" alt="Profile image" />
-            <button className="p-1 absolute bottom-8 md:hidden md:bottom-3 right-20 md:right-80 bg-white rounded-full border-2 border-slate-500">
+            <button className="p-1 absolute bottom-8 md:hidden md:bottom-3 right-20 md:right-80 rounded-full border-2 border-slate-500">
               <Image src={"/icons/edit.svg"} width={24} height={24} alt="Edit icon" />
             </button>
           </div>
@@ -118,6 +119,6 @@ export default async function SettingsPage() {
           <Button type="submit" className="w-full">Update</Button>
         </section>
       </form>
-    </section >
+    </Card >
   )
 }
