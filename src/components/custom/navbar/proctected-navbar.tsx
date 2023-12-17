@@ -45,7 +45,6 @@ export default async function ProtectedNavbar() {
   const username = data[0]?.username;
   const full_name = data[0]?.full_name;
 
-  let redirectDraftHref: string = "";
   const handleCreateNewDraft = async (formData: FormData) => {
     "use server";
     const supabase = createServerActionClient({ cookies });

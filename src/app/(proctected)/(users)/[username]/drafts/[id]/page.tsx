@@ -34,7 +34,6 @@ import { Input } from "@/components/ui/input"
 import { createServerActionClient, createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation";
-import { toast } from "@/components/ui/use-toast";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import Image from "next/image";
 
@@ -51,6 +50,7 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
     } else {
       return inputString;
     }
+
   }
 
   const supabase = createServerComponentClient({ cookies });
@@ -90,10 +90,7 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
 
       redirect(`/${username}/drafts/${entity_id}`);
     } else {
-      toast({
-        title: "Please select a valid option!",
-        description: "Incorrect or invalid response"
-      })
+      console.log("Oops, error")
       return;
     }
   }
@@ -159,22 +156,25 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
 
   const handleFinalPost = async (formData: FormData) => {
     "use server";
+    if (formData.get("genre") === "") {
+      return;
+    }
     const supabase = createServerActionClient({ cookies });
     if (currentDraft.entity_type === "story") {
-      const storiesPostResponse = await supabase.from("stories").update({ "is_published": true }).eq("entity_id", currentDraft.entity_id).select();
+      const storiesPostResponse = await supabase.from("stories").update({ "is_published": true, "genre": formData.get("genre") }).eq("entity_id", currentDraft.entity_id).select();
       if (storiesPostResponse.error) {
         console.log(storiesPostResponse.error)
         return;
       }
     }
     else if (currentDraft.entity_type === "poem") {
-      const poemsPostResponse = await supabase.from("poems").update({ "is_published": true }).eq("entity_id", currentDraft.entity_id).select();
+      const poemsPostResponse = await supabase.from("poems").update({ "is_published": true, "genre": formData.get("genre") }).eq("entity_id", currentDraft.entity_id).select();
       if (poemsPostResponse.error) {
         console.log(poemsPostResponse.error)
         return;
       }
     } else if (currentDraft.entity_type === "quote") {
-      const quotePostResponse = await supabase.from("quotes").update({ "is_published": true }).eq("entity_id", currentDraft.entity_id).select();
+      const quotePostResponse = await supabase.from("quotes").update({ "is_published": true, "genre": formData.get("genre") }).eq("entity_id", currentDraft.entity_id).select();
       if (quotePostResponse.error) {
         console.log(quotePostResponse.error)
         return;
@@ -219,14 +219,14 @@ export default async function DraftPage({ params }: DraftsPageInterface) {
           <Button variant="outline" type="submit" className="md:block fixed bottom-5 right-5 md:right-20 w-[12rem]">Save</Button>
           {/* For mobile screens only */}
           <DraftOptionsSidebarMobile trimString={trimString} handleFinalPost={handleFinalPost} sidebarOptions={sidebarOptions} handleCreateNewDraft={handleCreateNewDraft} />
-          <PublishPostDesktop handleFinalPost={handleFinalPost} />
+          <PublishPostDesktop handleFinalPost={handleFinalPost} entity_type={currentDraft.entity_type} />
         </form>
       </section>
     </section>
   )
 }
 
-const PublishPostDesktop = ({ handleFinalPost }) => {
+const PublishPostDesktop = ({ handleFinalPost, entity_type }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -240,9 +240,11 @@ const PublishPostDesktop = ({ handleFinalPost }) => {
           <p>Once published this post will be visible to all.</p>
           <div className="w-full flex items-end justify-end gap-3">
             <form action={handleFinalPost} className="mt-4 flex flex-col justify-start items-center w-full gap-8">
-              <SelectGenreComponentForStory />
+              <div className="w-full">
+
+                {entity_type === "story" ? <SelectGenreComponentForStory /> : entity_type === "poem" ? <SelectGenreComponentForPoem /> : <SelectGenreComponentForQuote />}
+              </div>
               <div className="w-full flex justify-end items-end gap-4">
-                <DialogClose><Button variant="outline">Cancel</Button></DialogClose>
                 <DialogClose><Button type="submit">Publish</Button></DialogClose>
               </div>
             </form>
@@ -365,31 +367,116 @@ const SelectGenreComponentForStory = () => {
     },
     {
       name: "Adventure",
-      value: "Classic",
+      value: "Adventure",
     },
     {
       name: "Science-fiction",
       value: "Science-fiction",
     }, {
-      name: "Religious",
-      value: "Religious",
+      name: "Classic",
+      value: "Classic",
     }
   ]
   return (
-    <Select value="genre">
-      <SelectTrigger className="text-white">
-        <SelectValue placeholder="Select a genre" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Genre</SelectLabel>
-          {selectOptions.map((item) => {
-            return (
-              <SelectItem key={1} value={item.value}>{item.name}</SelectItem>
-            )
-          })}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <div>
+      <Select name="genre">
+        <SelectTrigger className="text-white">
+          <SelectValue placeholder="Select a genre" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {selectOptions.map((item) => {
+              return (
+                <SelectItem key={1} value={item.value}>{item.name}</SelectItem>
+              )
+            })}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
+  )
+}
+
+const SelectGenreComponentForPoem = () => {
+  const selectOptions = [
+    {
+      name: "Epic",
+      value: "Epic",
+    }, {
+      name: "Balad",
+      value: "Balad",
+    },
+    {
+      name: "Haiku",
+      value: "Haiku",
+    },
+    {
+      name: "Free verse",
+      value: "Free verse",
+    },
+    {
+      name: "Fable",
+      value: "Fable",
+    },
+    {
+      name: "Romance",
+      value: "Romance",
+    }
+  ]
+  return (
+    <div>
+      <Select name="genre">
+        <SelectTrigger className="text-white">
+          <SelectValue placeholder="Select a genre" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {selectOptions.map((item) => {
+              return (
+                <SelectItem key={1} value={item.value}>{item.name}</SelectItem>
+              )
+            })}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
+  )
+}
+
+const SelectGenreComponentForQuote = () => {
+  const selectOptions = [
+    {
+      name: "Motivational",
+      value: "Motivational",
+    }, {
+      name: "Inspiring",
+      value: "Inspiring",
+    },
+    {
+      name: "Emotional",
+      value: "Emotional",
+    },
+    {
+      name: "Psychological",
+      value: "Psychological",
+    },
+  ]
+  return (
+    <div>
+      <Select name="genre">
+        <SelectTrigger className="text-white">
+          <SelectValue placeholder="Select a genre" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {selectOptions.map((item) => {
+              return (
+                <SelectItem key={1} value={item.value}>{item.name}</SelectItem>
+              )
+            })}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
   )
 }
