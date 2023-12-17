@@ -277,7 +277,7 @@ const DraftOptionsSidebarMobile = ({ sidebarOptions, handleFinalPost, trimString
                 return (
                   <div key={1}>
                     <Link href={item.href}>
-                      <Button variant="outline" className="py-[0.5px] min-w-[16rem] rounded-md">{slicedItemName}</Button>
+                      <Button variant="outline" className="py-[0.5px] w-full md:min-w-[16rem] rounded-md">{slicedItemName}</Button>
                     </Link>
                   </div>
                 )

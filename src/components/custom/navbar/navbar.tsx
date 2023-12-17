@@ -13,7 +13,7 @@ const Navbar = async () => {
       <nav className="p-4 flex justify-between items-center">
         <div>
           <Link href={"/"}>
-            <h2 className="scroll-m-20  pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+            <h2 className="scroll-m-20 dark:text-sky-200 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
               Rhymes & Fables
             </h2>
           </Link>
@@ -22,10 +22,10 @@ const Navbar = async () => {
         <div >
           <div className="flex justify-between items-center gap-4">
             <Link href={"/login"}>
-              <Button variant="ghost">Login</Button>
+              <Button variant="outline" className="rounded-full">Login</Button>
             </Link>
             <Link href={"/signup"}>
-              <Button variant="secondary">Signup</Button>
+              <Button variant="outline" className="rounded-full">Signup</Button>
             </Link>
             <ModeToggle />
           </div>

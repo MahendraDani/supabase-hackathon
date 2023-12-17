@@ -122,7 +122,7 @@ const LoginForm = () => {
           </Button>
         </CardHeader>
         <div className="flex justify-center items-center mb-2">
-          <div className="text-sm text-slate-300">OR CONTINUE WITH</div>
+          <div className="text-sm text-slate-500">OR CONTINUE WITH</div>
         </div>
         <CardContent>
           <form>

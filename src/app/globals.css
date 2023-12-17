@@ -7,7 +7,7 @@
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
-    --card: 0 0% 100%;
+    --card: 0 0% 95%;
     --card-foreground: 222.2 84% 4.9%;
  
     --popover: 0 0% 100%;
@@ -40,7 +40,7 @@
     --foreground: 210 40% 98%;
  
     --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card-foreground: 195 92% 85%;
  
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
@@ -74,3 +74,5 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Blue 210 50% 60%; */

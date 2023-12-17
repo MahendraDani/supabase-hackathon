@@ -36,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn(
-        "min-h-screen bg-background", fontSans.className
+        "min-h-screen bg-background bg-gradient-to-br from-sky-400 via-slate-300 to-sky-400 dark:from-gray-800 dark:to-black/20", fontSans.className
       )}>
         <ThemeProvider
           attribute="class"
@@ -48,9 +48,6 @@ export default function RootLayout({
           {children}
           <Toaster />
         </ThemeProvider>
-        <div className="fixed bottom-0 left-0 right-0">
-          <Footer />
-        </div>
       </body>
     </html>
   )

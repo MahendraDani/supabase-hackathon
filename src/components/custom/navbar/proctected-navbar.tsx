@@ -101,9 +101,11 @@ export default async function ProtectedNavbar() {
     },
   ];
   return (
-    <div className="sticky z-10 top-0 left-0 right-0 w-full flex justify-center items-center">
+    <div className="sticky z-10 top-0 left-0 right-0 w-full flex justify-center items-center bg-sky-300 dark:bg-sky-600">
       <nav className="w-full md:w-[85%] p-4 px-6 flex justify-between items-center">
-        <div>Rhymes and Fables</div>
+        <Link href={"/feeds"} className="cursor-pointer">
+          <div className="md:text-2xl font-bold text-lg dark:text-black">Rhymes and Fables</div>
+        </Link>
         <div className="flex justify-start gap-4 items-center">
           <ModeToggle />
           <Sheet>
@@ -177,10 +179,10 @@ const LogoutComponent = () => {
             There are many more stories, poems and quotes left to read, explore, learn and have fun.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
+        <AlertDialogFooter className="flex justify-end items-end gap-4">
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <form action={handleLogout}>
-            <Button type="submit" >Log out</Button>
+            <Button type="submit" className="w-full" >Log out</Button>
           </form>
         </AlertDialogFooter>
       </AlertDialogContent>

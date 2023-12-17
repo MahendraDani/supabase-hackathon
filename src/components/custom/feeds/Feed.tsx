@@ -42,7 +42,7 @@ export default async function Feeds() {
           mixedFeeds.map((f) => {
             return (
               <div key={f.entity_id}>
-                <Card className="w-full md:w-[80%] lg:w-[70%] mx-auto">
+                <Card className="w-[90%] md:w-[80%] lg:w-[70%] mx-auto">
                   <CardContent className="p-8 w-full -mb-8 flex justify-between items-center">
                     <div className="flex justify-start items-center gap-4">
                       <Avatar>
