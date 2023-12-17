@@ -27,5 +27,5 @@ Rhymes and Fables is a platform where you can convert your crazy ideas into amaz
 ## Connect with me
 
 1. [Github](https://github.com/MahendraDani)
-2. [Linkedin]("https://linkedin.com/in/mahendra-dani)
+2. [Linkedin](https://linkedin.com/in/mahendra-dani)
 3. [Twitter](https://twitter.com/@MahendraDani09)
