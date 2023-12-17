@@ -17,6 +17,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 import { z } from "zod";
+import Link from "next/link";
 
 
 const SignupForm = () => {
@@ -110,8 +111,9 @@ const SignupForm = () => {
             </div>
           </form>
         </CardContent>
-        <CardFooter className="flex justify-center items-center">
+        <CardFooter className="flex flex-col gap-3 justify-center items-center">
           <Button onClick={hanldeSignup}>Sign up</Button>
+          <p className="dark:text-slate-500">Are you registered already? <Link href={"/login"}>Login</Link></p>
         </CardFooter>
       </Card>
 

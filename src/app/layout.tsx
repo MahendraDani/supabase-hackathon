@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import Navbar from '@/components/custom/navbar/navbar';
 import { Toaster } from "@/components/ui/toaster"
 import { Metadata } from "next";
+import { Footer } from "@/components/custom/Footer";
 
 
 
@@ -47,6 +48,9 @@ export default function RootLayout({
           {children}
           <Toaster />
         </ThemeProvider>
+        <div className="fixed bottom-0 left-0 right-0">
+          <Footer />
+        </div>
       </body>
     </html>
   )

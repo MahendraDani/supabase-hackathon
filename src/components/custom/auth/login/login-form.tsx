@@ -18,6 +18,7 @@ import Image from "next/image";
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 import { z } from "zod";
+import Link from "next/link";
 
 const LoginForm = () => {
   const { toast } = useToast()
@@ -104,7 +105,7 @@ const LoginForm = () => {
 
   return (
     <div>
-      <Card className="w-[350px]">
+      <Card className="w-[350px] mb-24">
         <CardHeader className="text-center -mb-8">
           <CardTitle>Log into your Account</CardTitle>
           <CardDescription>Convert your ideas to amazing stories!</CardDescription>
@@ -138,8 +139,9 @@ const LoginForm = () => {
             </div>
           </form>
         </CardContent>
-        <CardFooter className="flex justify-center items-center">
+        <CardFooter className="flex flex-col justify-center items-center gap-3">
           <Button onClick={handleLogin}>Log in</Button>
+          <p className="dark:text-slate-500">Don't have an account? <Link href={"/signup"}>Signup</Link></p>
         </CardFooter>
       </Card>
 

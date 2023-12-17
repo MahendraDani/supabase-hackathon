@@ -9,7 +9,7 @@ const Navbar = async () => {
   const router = useRouter();
 
   return (
-    <div className="w-[90%] mx-auto border-b-[1px] border-slate-200">
+    <div className="w-[90%] mx-auto">
       <nav className="p-4 flex justify-between items-center">
         <div>
           <Link href={"/"}>
@@ -21,8 +21,12 @@ const Navbar = async () => {
 
         <div >
           <div className="flex justify-between items-center gap-4">
-            <Link href={"/login"}>Login</Link>
-            <Link href={"/signup"}>Sign up</Link>
+            <Link href={"/login"}>
+              <Button variant="ghost">Login</Button>
+            </Link>
+            <Link href={"/signup"}>
+              <Button variant="secondary">Signup</Button>
+            </Link>
             <ModeToggle />
           </div>
         </div>
