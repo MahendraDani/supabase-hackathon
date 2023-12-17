@@ -33,7 +33,7 @@ const onboardingFormSchema = z.object({
   username: z.string().min(6, { message: "Username must be atleast 6 characters long" })
 })
 
-export default function ({ params }: PageProps) {
+export default function OnboardingPage({ params }: PageProps) {
   const { toast } = useToast()
   const [fullName, setfullName] = useState("");
   const [username, setUsername] = useState("");

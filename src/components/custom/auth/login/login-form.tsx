@@ -141,7 +141,7 @@ const LoginForm = () => {
         </CardContent>
         <CardFooter className="flex flex-col justify-center items-center gap-3">
           <Button onClick={handleLogin}>Log in</Button>
-          <p className="dark:text-slate-500">Don't have an account? <Link href={"/signup"}>Signup</Link></p>
+          <p className="dark:text-slate-500">Dont have an account? <Link href={"/signup"}>Signup</Link></p>
         </CardFooter>
       </Card>
 
