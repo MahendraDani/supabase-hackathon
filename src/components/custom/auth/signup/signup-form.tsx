@@ -65,7 +65,7 @@ const SignupForm = () => {
       email: parsedInput.data.email,
       password: parsedInput.data.password,
       options: {
-        emailRedirectTo: `${location.origin}/auth/callback`
+        emailRedirectTo: `https://rhymes-and-fables.vercel.app/auth/callback`
       }
     })
 

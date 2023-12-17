@@ -15,10 +15,12 @@ export async function GET(request: Request) {
     // If logic is success , user will be redirected to this route
     // TODO figure out a way to redirect users who login with google or github to /onboard/[id] route without breaking the app
     if (user) {
-      return NextResponse.redirect(`${location.origin}/${user?.id}`);
+      return NextResponse.redirect(
+        `https://rhymes-and-fables.vercel.app/${user?.id}`
+      );
     }
-    return NextResponse.redirect(`${location.origin}/signup`);
+    return NextResponse.redirect(`https://rhymes-and-fables.vercel.app/signup`);
   }
   //TODO :  THIS happens when there is some error, so show an error page instead
-  return NextResponse.redirect(`${location.origin}/signup`);
+  return NextResponse.redirect(`https://rhymes-and-fables.vercel.app/signup`);
 }

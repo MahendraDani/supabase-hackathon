@@ -82,7 +82,7 @@ const LoginForm = () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
-        redirectTo: `${location.origin}/auth/callback/`
+        redirectTo: `https://rhymes-and-fables.vercel.app/auth/callback/`
       }
     })
 
@@ -95,7 +95,7 @@ const LoginForm = () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${location.origin}/auth/callback/`
+        redirectTo: `https://rhymes-and-fables.vercel/auth/callback/`
       }
     })
 
