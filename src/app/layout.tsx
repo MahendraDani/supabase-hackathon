@@ -34,7 +34,7 @@ export default function RootLayout({
 }) {
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning >
       <body className={cn(
         "min-h-screen bg-background bg-gradient-to-br from-sky-400 via-slate-300 to-sky-400 dark:from-gray-800 dark:to-black/20", fontSans.className
       )}>

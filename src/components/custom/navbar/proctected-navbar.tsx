@@ -104,10 +104,11 @@ export default async function ProtectedNavbar() {
     <div className="sticky z-10 top-0 left-0 right-0 w-full flex justify-center items-center bg-sky-300 dark:bg-sky-600">
       <nav className="w-full md:w-[85%] p-4 px-6 flex justify-between items-center">
         <Link href={"/feeds"} className="cursor-pointer">
-          <div className="md:text-2xl font-bold text-lg dark:text-black">Rhymes and Fables</div>
+          <div className="hidden md:block md:text-2xl font-bold text-lg dark:text-black">Rhymes and Fables</div>
+          <div className="md:hidden block md:text-2xl font-bold text-lg dark:text-black">R & F</div>
         </Link>
         <div className="flex justify-start gap-4 items-center">
-          <ModeToggle />
+          {/* <ModeToggle /> */}
           <Sheet>
             <SheetTrigger>
               <Avatar>
