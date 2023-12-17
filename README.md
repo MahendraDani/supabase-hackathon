@@ -6,7 +6,7 @@ Have a crazy story in your mind but can't showcase it to the world?
 We have just the right solution for you: Rhymes and Fables
 Rhymes and Fables is a platform where you can convert your crazy ideas into amazing stories and poems. Share your thoughts and opinions as quotes.
 
-(Go to website)[https://rhymes-and-fables.vercel.app/]
+[Go to website](https://rhymes-and-fables.vercel.app/)
 
 ## Features
 
@@ -26,6 +26,6 @@ Rhymes and Fables is a platform where you can convert your crazy ideas into amaz
 
 ## Connect with me
 
-1. (Github)["https://github.com/MahendraDani"]
-2. (Linkedin)["https://linkedin.com/in/mahendra-dani]
-3. (Twitter)["https://twitter.com/@MahendraDani09]
+1. [Github](https://github.com/MahendraDani)
+2. [Linkedin]("https://linkedin.com/in/mahendra-dani)
+3. [Twitter](https://twitter.com/@MahendraDani09)

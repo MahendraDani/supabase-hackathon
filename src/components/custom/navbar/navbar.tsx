@@ -30,7 +30,7 @@ const Navbar = async () => {
             <Link href={"/signup"}>
               <Button variant="outline" className="rounded-full">Signup</Button>
             </Link>
-            {/* <ModeToggle /> */}
+            <ModeToggle />
           </div>
         </div>
       </nav >

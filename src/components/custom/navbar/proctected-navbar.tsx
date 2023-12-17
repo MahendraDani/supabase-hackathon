@@ -108,7 +108,7 @@ export default async function ProtectedNavbar() {
           <div className="md:hidden block md:text-2xl font-bold text-lg dark:text-black">R & F</div>
         </Link>
         <div className="flex justify-start gap-4 items-center">
-          {/* <ModeToggle /> */}
+          <ModeToggle />
           <Sheet>
             <SheetTrigger>
               <Avatar>
