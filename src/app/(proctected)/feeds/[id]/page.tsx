@@ -20,6 +20,9 @@ import { formatDate } from "@/lib/utils/formatDate";
 import { MdOutlineComment } from "react-icons/md"
 import { IoMdShare } from "react-icons/io"
 import { GoHeartFill, GoHeart } from "react-icons/go"
+import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
+import { IoPerson } from "react-icons/io5"
 
 
 
@@ -135,12 +138,21 @@ const FeedPage = async ({ params }: FeedPageInterface) => {
         <h1 className="scroll-m-20 sm:text-5xl md:text-7xl dark:text-card-foreground font-openSans font-extrabold tracking-tight lg:text-5xl">
           {currentFeed.title}
         </h1>
-        <p>{currentFeed.entity_type}</p>
-        <div className="">{currentFeed.content}</div>
-        <div className="fixed bottom-10 flex justify-between items-center gap-3 border-2 dark:bg-background border-heading px-4 rounded-full">
+        <div className="my-8 flex justify-start items-center gap-4">
+          {/* <Image src={avatar_url ? avatar_url : "/icons/person.png"} alt="Profile image" width={64} height={64} className="rounded-full" /> */}
+          <div className="text-2xl rounded-full p-2 bg-slate-300">
+            <IoPerson />
+          </div>
+          <div className="flex flex-col ">
+            <p>{"Maehndra"}</p>
+            <p className="text-sm">{`@Dani`}</p>
+          </div>
+        </div>
+        <div className="text-center leading-[2rem] text-xl dark:text-slate-400">{currentFeed.content}</div>
+        <div className="fixed bottom-10 py-2 flex justify-between items-center gap-3 border-2 dark:bg-background border-heading px-4 rounded-full">
           {!isLiked ? <form action={handleLikePost}>
             <div className="text-2xl cursor-pointer"><GoHeart /></div>
-          </form> : <div className="text-2xl cursor-pointer"><GoHeartFill /></div>}
+          </form> : "yes liked"}
           <CommentsComponent entity_id={entity_id} entity_type={entity_type} />
           <div className="text-2xl cursor-pointer">
             <IoMdShare />
@@ -216,7 +228,7 @@ const CommentsComponent = async ({ entity_id, entity_type }) => {
       <SheetTrigger asChild>
         {/* <Button variant="outline">Open</Button> */}
         {/* <IconButton src="/icons/comment.png" width={28} height={28} alt="Comment Button" /> */}
-        <div className="text-lg">
+        <div className="text-2xl cursor-pointer">
           <MdOutlineComment />
         </div>
       </SheetTrigger>

@@ -41,9 +41,10 @@ export default async function ProtectedNavbar() {
   if (error) {
     JSON.stringify(error, null, 2);
   }
-  const { data } = await supabase.from("profiles").select(`username,full_name`).eq("user_id", user?.id);
+  const { data } = await supabase.from("profiles").select(`username,full_name,avatar_url`).eq("user_id", user?.id);
   const username = data[0]?.username;
   const full_name = data[0]?.full_name;
+  const avatar_url = data[0]?.avatar_url;
 
   const handleCreateNewDraft = async (formData: FormData) => {
     "use server";
@@ -108,14 +109,14 @@ export default async function ProtectedNavbar() {
           <Sheet>
             <SheetTrigger>
               <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                <AvatarImage src={avatar_url ? avatar_url : "/icons/person.png"} alt="Profile" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </SheetTrigger>
             <SheetContent>
               <SheetHeader>
                 <div className="mt-4 flex justify-start items-center gap-4">
-                  <Image src={"https://github.com/shadcn.png"} alt="Profile image" width={64} height={64} className="rounded-full" />
+                  <Image src={avatar_url ? avatar_url : "/icons/person.png"} alt="Profile image" width={64} height={64} className="rounded-full" />
                   <div className="flex flex-col ">
                     <p>{full_name}</p>
                     <p className="text-sm">{`@${username}`}</p>

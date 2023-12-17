@@ -16,6 +16,7 @@ import { GoHeartFill } from "react-icons/go"
 import { FaBookReader, FaLightbulb } from "react-icons/fa"
 import { GiStabbedNote } from "react-icons/gi"
 import { LuTrees } from "react-icons/lu"
+import { Badge } from "@/components/ui/badge";
 
 
 const shuffleArray = (array: any) => {
@@ -56,6 +57,7 @@ export default async function Feeds() {
                       </div>
                     </div>
                     <div className="flex justify-start items-start gap-2">
+                      {f.genre ? <Badge>{f?.genre}</Badge> : ""}
                       {f.entity_type === "story" ? <div className="text-lg"><LuTrees /></div>
                         : f.entity_type === "poem" ? <div className="text-lg"><GiStabbedNote /></div>
                           : <div className="text-lg"><FaLightbulb /></div>
