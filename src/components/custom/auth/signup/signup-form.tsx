@@ -46,6 +46,7 @@ const SignupForm = () => {
     }
     const parsedInput = signupFormSchema.safeParse({ email, password })
     if (!parsedInput.success) {
+      // @ts-ignore
       const parseErrors = parsedInput.error.issues;
       parseErrors.forEach((e) => {
         if (e.path[0] === "email") {

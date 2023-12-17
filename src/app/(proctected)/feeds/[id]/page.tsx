@@ -35,6 +35,7 @@ type currentFeedType = Story | Poem | Quote
 const FeedPage = async ({ params }: FeedPageInterface) => {
   const [entity_type, entity_id] = params.id.split("E");
 
+  // @ts-ignore
   let currentFeed: currentFeedType = {};
   const supabase = createServerComponentClient({ cookies });
   const { data: { user } } = await supabase.auth.getUser();

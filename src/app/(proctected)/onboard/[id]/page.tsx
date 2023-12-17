@@ -59,6 +59,7 @@ export default function OnboardingPage({ params }: PageProps) {
 
     const parsedInput = onboardingFormSchema.safeParse({ fullName, username });
     if (!parsedInput.success) {
+      //@ts-ignore
       const parsedErrors = parsedInput.error.issues;
       parsedErrors.forEach((e) => {
         console.log(e.path[0]);
