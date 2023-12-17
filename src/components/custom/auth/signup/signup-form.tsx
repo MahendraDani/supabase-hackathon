@@ -65,7 +65,7 @@ const SignupForm = () => {
       email: parsedInput.data.email,
       password: parsedInput.data.password,
       options: {
-        emailRedirectTo: "http://localhost:3000/auth/callback"
+        emailRedirectTo: `${location.origin}/auth/callback`
       }
     })
 
