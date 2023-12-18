@@ -24,6 +24,43 @@ Rhymes and Fables is a platform where you can convert your crazy ideas into amaz
 4. Shadcn & Tailwindcss - css framework for styling and theming
 5. Vercel : Deployment
 
+## Setting up locally
+
+To setup the project locally follow the given steps
+
+1. Fork this repo
+2. Go to the terminal and clone the project in your machine
+
+```
+https://github.com/<your-github-username>/supabase-hackathon.git
+```
+
+3. Change directory to the project directory
+
+```
+cd supabase-hackathon
+```
+
+4. Install the dependencies
+
+```
+npm install
+```
+
+5. Set up environment variables
+
+```
+cp .env.example .env.local
+```
+
+Create a supabase project, go tp project settings and add your `SUPABASE_URL` and `SUPABASE_ANON_KEY` in `.env.exmample` 6. Optional : Set up Google and and Github OAuth Providers 7. Run the project
+
+```
+npm run dev
+```
+
+Go to localhost:3000 where the project will be running!
+
 ## Connect with me
 
 1. [Github](https://github.com/MahendraDani)
