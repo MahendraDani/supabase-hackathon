@@ -22,6 +22,7 @@ import {
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 import { z } from "zod";
+import { redirect } from "next/navigation";
 
 interface PageProps {
   params: {
@@ -33,6 +34,7 @@ const onboardingFormSchema = z.object({
   username: z.string().min(6, { message: "Username must be atleast 6 characters long" })
 })
 
+
 export default function OnboardingPage({ params }: PageProps) {
   const { toast } = useToast()
   const [fullName, setfullName] = useState("");
@@ -43,6 +45,11 @@ export default function OnboardingPage({ params }: PageProps) {
   const [isUsernameError, setIsUsernameError] = useState(false);
   const [usernameErrorMessage, SetUserNameErrorMessage] = useState("");
 
+  function validateString(inputString: string) {
+    // Define a regular expression pattern for uppercase letters, lowercase letters, and numbers
+    const pattern = /^[a-zA-Z0-9]+$/;
+    return pattern.test(inputString);
+  }
 
 
   const handleFormSubmit = async () => {
@@ -55,6 +62,7 @@ export default function OnboardingPage({ params }: PageProps) {
       })
       return;
     }
+
 
 
     const parsedInput = onboardingFormSchema.safeParse({ fullName, username });
@@ -74,6 +82,14 @@ export default function OnboardingPage({ params }: PageProps) {
       return;
     }
 
+    if (!validateString(username)) {
+      toast({
+        title: "Incorrect username",
+        description: "Username should NOT contain any special characters",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      })
+      return;
+    }
 
     const supabase = createClientComponentClient();
     const { data, error } = await supabase.from("profiles").insert([{
@@ -94,7 +110,7 @@ export default function OnboardingPage({ params }: PageProps) {
 
       return;
     }
-    alert("Yay, profile created")
+    redirect("/feeds")
     // TODO : redirect user to home page instead
   }
   return (
