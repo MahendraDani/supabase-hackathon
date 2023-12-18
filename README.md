@@ -10,6 +10,14 @@ Rhymes and Fables is a platform where you can convert your crazy ideas into amaz
 [Demo Video](https://drive.google.com/file/d/1WjDVINE3DSfQlCke7_jA_0Iuo_MR4faN/view?usp=drive_link)
 [Contact Me](https://twitter.com/MahendraDani09)
 
+## Screenshots
+
+![Landing page ](/public/screenshots//landing-dark.png)
+![Feeds page](/public//screenshots//feeds-dark.png)
+
+![Landing page light](/public//screenshots//landing-light.png)
+![Feed Page light](/public//screenshots//feeds-light.png)
+
 ## Features
 
 1. Fully functional two factor authentication with Email, Google OAuth and Github OAuth.
