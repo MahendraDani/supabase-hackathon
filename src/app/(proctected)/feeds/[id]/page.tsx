@@ -135,20 +135,10 @@ const FeedPage = async ({ params }: FeedPageInterface) => {
   }
   return (
     <div className="relative mt-4 w-full flex flex-col justify-center items-center">
-      <section className="w-full md:w-[80%] p-4 flex flex-col justify-center items-center">
+      <section className="w-full md:w-[80%] p-4 flex flex-col justify-center items-center gap-6">
         <h1 className="scroll-m-20 sm:text-5xl md:text-7xl dark:text-card-foreground font-openSans font-extrabold tracking-tight lg:text-5xl">
           {currentFeed.title}
         </h1>
-        <div className="my-8 flex justify-start items-center gap-4">
-          {/* <Image src={avatar_url ? avatar_url : "/icons/person.png"} alt="Profile image" width={64} height={64} className="rounded-full" /> */}
-          <div className="text-2xl rounded-full p-2 bg-slate-300">
-            <IoPerson />
-          </div>
-          <div className="flex flex-col ">
-            <p>{"Maehndra"}</p>
-            <p className="text-sm">{`@Dani`}</p>
-          </div>
-        </div>
         <div className="text-center leading-[2rem] text-xl dark:text-slate-400">{currentFeed.content}</div>
         <div className="fixed bottom-10 py-2 flex justify-between items-center gap-3 border-2 dark:bg-background border-heading px-4 rounded-full">
           {!isLiked ? <form action={handleLikePost}>
