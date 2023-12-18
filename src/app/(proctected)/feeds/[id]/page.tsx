@@ -23,6 +23,7 @@ import { GoHeartFill, GoHeart } from "react-icons/go"
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { IoPerson } from "react-icons/io5"
+import { useRouter } from "next/navigation"
 
 
 
@@ -33,6 +34,7 @@ interface FeedPageInterface {
 }
 type currentFeedType = Story | Poem | Quote
 const FeedPage = async ({ params }: FeedPageInterface) => {
+  const router = useRouter();
   const [entity_type, entity_id] = params.id.split("E");
 
   // @ts-ignore
@@ -114,6 +116,7 @@ const FeedPage = async ({ params }: FeedPageInterface) => {
         await supabase.from("poems").update({ "like_count": prevLikeCount.data[0].like_count + 1 }).eq("entity_id", entity_id);
       }
     }
+    router.refresh();
   }
 
   let isLiked = false;
@@ -168,6 +171,7 @@ export default FeedPage;
 
 // Comments component
 const CommentsComponent = async ({ entity_id, entity_type }) => {
+  const router = useRouter();
   const supabase = createServerComponentClient<Database>({ cookies });
   const userAuth = await supabase.auth.getUser();
   const profileDetails = await supabase.from("profiles").select(`username,full_name,avatar_url`).eq("user_id", userAuth.data.user.id);
@@ -202,6 +206,7 @@ const CommentsComponent = async ({ entity_id, entity_type }) => {
         await supbaseActionClient.from("poem_comments").update({ "comment": formData.get("comment").toString() }).eq("user_id", userAuth.data.user.id).eq("entity_id", entity_id);
       }
     }
+    router.refresh();
   }
 
   // Fetch existing comments

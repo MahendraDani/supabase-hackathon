@@ -7,9 +7,11 @@ import { createClientComponentClient, createServerActionClient, createServerComp
 import Image from "next/image";
 import { cookies } from "next/headers"
 import { Card } from "@/components/ui/card";
+import { useRouter } from "next/navigation"
 
 
 export default async function SettingsPage() {
+  const router = useRouter();
   const supabase = createServerComponentClient({ cookies });
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -37,7 +39,7 @@ export default async function SettingsPage() {
     if (error) {
       console.log(error);
     }
-
+    router.refresh();
   }
   return (
     <Card className="p-4">
