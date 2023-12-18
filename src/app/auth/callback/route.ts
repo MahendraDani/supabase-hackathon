@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   if (code) {
     const supabase = createRouteHandlerClient({ cookies });
     const response = await supabase.auth.exchangeCodeForSession(code);
-    console.log(response);
+    // console.log(response);
     if (response.data) {
       const {
         data: { user },
@@ -25,6 +25,7 @@ export async function GET(request: Request) {
         .from("profiles")
         .select("user_id")
         .eq("user_id", user.id);
+      // console.log(profilesResponse);
       if (profilesResponse.data.length === 0) {
         return NextResponse.redirect(
           `https://rhymes-and-fables.vercel.app/onboard/${user.id}`
@@ -35,7 +36,6 @@ export async function GET(request: Request) {
         );
       }
     }
-    return NextResponse.redirect("https://rhymes-and-fables.vercel.app/signup");
   }
   //TODO :  THIS happens when there is some error, so show an error page instead
   return NextResponse.redirect(`https://rhymes-and-fables.vercel.app/signup`);
