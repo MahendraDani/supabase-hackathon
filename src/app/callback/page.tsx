@@ -1,4 +1,4 @@
-export default function CallBack() {
+const CallBack = () => {
   return (
     <div className="min-h-[30rem] w-full flex justify-center items-center">
       <h1 className="md:text-4xl text-2xl text-black font-bold dark:text-sky-200">
@@ -7,3 +7,4 @@ export default function CallBack() {
     </div>
   )
 }
+export default CallBack
