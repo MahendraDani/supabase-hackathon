@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import Navbar from '@/components/custom/navbar/navbar';
 import { Toaster } from "@/components/ui/toaster"
 import { Metadata } from "next";
-import { Footer } from "@/components/custom/Footer";
 
 
 
@@ -36,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning >
       <body className={cn(
-        "min-h-screen bg-background bg-gradient-to-br from-sky-400 via-slate-300 to-sky-400 dark:from-gray-800 dark:to-black/20", fontSans.className
+        "min-h-screen bg-background bg-gradient-to-br from-sky-400 via-slate-300 to-sky-400 dark:from-gray-800 dark:to-black/20", openSans.className
       )}>
         <ThemeProvider
           attribute="class"
@@ -44,7 +43,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* <Navbar /> */}
           {children}
           <Toaster />
         </ThemeProvider>

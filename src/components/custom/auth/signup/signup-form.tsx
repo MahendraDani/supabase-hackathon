@@ -87,7 +87,7 @@ const SignupForm = () => {
     }
     // TODO : DON'T REDIRECT USER SHOW THEM TO OPEN THEIR EMAIL FOR CONFIRMATION LINK
     // router.push(`/onboard/${user?.id}`);
-    router.push("/callback")
+    // router.push("/callback")
   }
 
   return (
