@@ -22,7 +22,7 @@ import {
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 import { z } from "zod";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 interface PageProps {
   params: {
@@ -36,6 +36,7 @@ const onboardingFormSchema = z.object({
 
 
 export default function OnboardingPage({ params }: PageProps) {
+  const router = useRouter();
   const { toast } = useToast()
   const [fullName, setfullName] = useState("");
   const [username, setUsername] = useState("");
@@ -110,7 +111,7 @@ export default function OnboardingPage({ params }: PageProps) {
 
       return;
     }
-    redirect("/feeds")
+    router.push("/feeds")
     // TODO : redirect user to home page instead
   }
   return (
