@@ -85,9 +85,7 @@ const SignupForm = () => {
       }
       return;
     }
-    // TODO : DON'T REDIRECT USER SHOW THEM TO OPEN THEIR EMAIL FOR CONFIRMATION LINK
-    // router.push(`/onboard/${user?.id}`);
-    router.push("/hold")
+
   }
 
   return (
@@ -116,6 +114,7 @@ const SignupForm = () => {
         <CardFooter className="flex flex-col gap-3 justify-center items-center">
           <Button onClick={hanldeSignup}>Sign up</Button>
           <p className="dark:text-slate-500">Are you registered already? <Link href={"/login"}>Login</Link></p>
+          <p>Please check your email for confirmation after signinup</p>
         </CardFooter>
       </Card>
 
