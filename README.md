@@ -1,12 +1,14 @@
 # Rhymes and Fables
 
-> This project is developed for Supabase Launch Week X Hackathon
+> This project is developed for Supabase Launch Week X Hackathon by Mahendra Dani
 
 Have a crazy story in your mind but can't showcase it to the world?
 We have just the right solution for you: Rhymes and Fables
 Rhymes and Fables is a platform where you can convert your crazy ideas into amazing stories and poems. Share your thoughts and opinions as quotes.
 
 [Go to website](https://rhymes-and-fables.vercel.app/)
+[Demo Video](https://drive.google.com/file/d/1WjDVINE3DSfQlCke7_jA_0Iuo_MR4faN/view?usp=drive_link)
+[Contact Me](https://twitter.com/MahendraDani09)
 
 ## Features
 
