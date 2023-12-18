@@ -95,7 +95,8 @@ const LoginForm = () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `https://rhymes-and-fables.vercel/auth/callback/`
+        // Replace with https://rhymes-and-fables.vercel.app/auth/callback
+        redirectTo: `https://rhymes-and-fables.vercel.app/auth/callback/`
       }
     })
 
