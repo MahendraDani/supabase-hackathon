@@ -3,6 +3,8 @@ import { cookies } from "next/headers"
 import { Metadata } from "next"
 import { ReactNode } from "react"
 import ProtectedNavbar from "@/components/custom/navbar/proctected-navbar";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface ProctectedPagesLayoutProps {
   children: ReactNode
@@ -27,9 +29,11 @@ export default async function ProctectedPagesLayout({ children }: ProctectedPage
     )
   } else {
     return (
-      // TODO : Create a not Authorized page UI
-      <div>
-        <p>You are not AUHTORIZED</p>
+      <div className="min-h-[30rem] flex justify-center items-center">
+        <p className="text-3xl md:text-5xl dark:text-sky-200 text-slate-700">Sorry! You are not authorized to view this page</p>
+        <Link href={"/"}>
+          <Button>Go Back</Button>
+        </Link>
       </div>
     )
   }
